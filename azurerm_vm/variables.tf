@@ -28,31 +28,6 @@ variable "enable_public_ip_address" {
   default     = false
 }
 
-variable "public_ip_allocation_method" {
-  description = "Defines the allocation method for this IP address. Possible values are `Static` or `Dynamic`"
-  default     = "Static"
-}
-
-variable "public_ip_sku" {
-  description = "The SKU of the Public IP. Accepted values are `Basic` and `Standard`"
-  default     = "Standard"
-}
-
-variable "domain_name_label" {
-  description = "Label for the Domain Name. Will be used to make up the FQDN. If a domain name label is specified, an A DNS record is created for the public IP in the Microsoft Azure DNS system."
-  default     = null
-}
-
-variable "public_ip_availability_zone" {
-  description = "The availability zone to allocate the Public IP in. Possible values are `Zone-Redundant`, `1`,`2`, `3`, and `No-Zone`"
-  default     = "No-Zone"
-}
-
-variable "public_ip_sku_tier" {
-  description = "The SKU Tier that should be used for the Public IP. Possible values are `Regional` and `Global`"
-  default     = "Regional"
-}
-
 variable "dns_servers" {
   description = "List of dns servers to use for network interface"
   default     = []
@@ -107,10 +82,14 @@ variable "existing_network_security_group_id" {
   default     = null
 }
 
-variable "nsg_inbound_rules" {
-  description = "List of network rules to apply to network interface."
-  default     = []
-}
+# variable "public_ip" {
+#   description = "Name of the Public IP that is being referred."
+# }
+
+# variable "nsg_inbound_rules" {
+#   description = "List of network rules to apply to network interface."
+#   default     = []
+# }
 
 variable "virtual_machine_name" {
   description = "The name of the virtual machine."
@@ -179,7 +158,7 @@ variable "vm_availability_zone" {
 
 variable "patch_mode" {
   description = "Specifies the mode of in-guest patching to this Windows Virtual Machine. Possible values are `Manual`, `AutomaticByOS` and `AutomaticByPlatform`"
-  default     = "AutomaticByOS"
+  default     = "Manual"
 }
 
 variable "license_type" {
@@ -201,6 +180,11 @@ variable "admin_ssh_key_data" {
   description = "specify the path to the existing SSH key to authenticate Linux virtual machine"
   default     = null
 }
+
+# variable "system_assigned_vm_scope" {
+#   description = "Scope of the System Assigned MI enabled for the VM."
+#   default = "/subscriptions/5d798471-bf04-46ec-8de0-8e42a4c1da3e/resourceGroups/Terraform-State-File/providers/Microsoft.Storage/storageAccounts/mytfstatefile"
+# }
 
 variable "custom_image" {
   description = "Provide the custom image to this module if the default variants are not sufficient"
@@ -675,14 +659,24 @@ variable "enable_ultra_ssd_data_disk_storage_support" {
 }
 
 variable "managed_identity_type" {
-  description = "The type of Managed Identity which should be assigned to the Linux Virtual Machine. Possible values are `SystemAssigned`, `UserAssigned` and `SystemAssigned, UserAssigned`"
+  description = "The type of Managed Identity which should be assigned to the Virtual Machine. Possible values are `SystemAssigned`, `UserAssigned` and `SystemAssigned, UserAssigned`"
   default     = null
 }
 
 variable "managed_identity_ids" {
-  description = "A list of User Managed Identity ID's which should be assigned to the Linux Virtual Machine."
+  description = "A list of User Managed Identity ID's which should be assigned to the Virtual Machine."
   default     = null
 }
+
+# variable "identity_type" {
+#   description = "The type of Identity which should be assigned to the Virtual Machine. Possible values are `SystemAssigned`, `UserAssigned` and `SystemAssigned, UserAssigned`"
+#   default = null
+# }
+
+# variable "role_vm_definition" {
+#   description = "RBAC role that needs to be assigned to the VM if it is a System Assigned MI"
+#   default = null
+# }
 
 variable "winrm_protocol" {
   description = "Specifies the protocol of winrm listener. Possible values are `Http` or `Https`"

@@ -51,12 +51,19 @@ output "windows_virtual_machine_ids" {
   value       = var.os_flavor == "windows" ? concat(azurerm_windows_virtual_machine.win_vm.*.id, [""]) : null
 }
 
-output "network_security_group_ids" {
-  description = "List of Network security groups and ids"
-  value       = var.existing_network_security_group_id == null ? azurerm_network_security_group.nsg.*.id : null
-}
+# output "network_security_group_ids" {
+#   description = "List of Network security groups and ids"
+#   value       = var.existing_network_security_group_id == null ? azurerm_network_security_group.nsg.*.id : null
+# }
 
 output "vm_availability_set_id" {
   description = "The resource ID of Virtual Machine availability set"
   value       = var.enable_vm_availability_set == true ? element(concat(azurerm_availability_set.aset.*.id, [""]), 0) : null
+}
+
+output "vm_principal_ids" {
+  description = "Object/Principal IDs of the VMs with managed identity type."
+  value = flatten([
+    for identity in azurerm_windows_virtual_machine.win_vm[*].identity : identity[*].principal_id
+  ])
 }

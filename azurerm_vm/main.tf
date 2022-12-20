@@ -1,11 +1,5 @@
 locals {
-  # nsg_inbound_rules = { for idx, security_rule in var.nsg_inbound_rules : security_rule.name => {
-  #   idx : idx,
-  #   security_rule : security_rule,
-  #   }
-  # }
-
-  vm_data_disks = { for idx, data_disk in var.data_disks : data_disk.name => {
+   vm_data_disks = { for idx, data_disk in var.data_disks : data_disk.name => {
     idx : idx,
     data_disk : data_disk,
     }
@@ -45,6 +39,11 @@ data "azurerm_storage_account" "storeacc" {
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
+# data "azurerm_public_ip" "public_ip" {
+#   name = var.public_ip
+#   resource_group_name = data.azurerm_resource_group.rg.name
+# }
+
 resource "random_password" "passwd" {
   count       = (var.os_flavor == "linux" && var.disable_password_authentication == false && var.admin_password == null ? 1 : (var.os_flavor == "windows" && var.admin_password == null ? 1 : 0))
   length      = var.random_password_length
@@ -61,25 +60,25 @@ resource "random_password" "passwd" {
 #-----------------------------------
 # Public IP for Virtual Machine
 #-----------------------------------
-resource "azurerm_public_ip" "pip" {
-  count               = var.enable_public_ip_address == true ? var.instances_count : 0
-  name                = lower("pip-vm-${var.virtual_machine_name}-${data.azurerm_resource_group.rg.location}-0${count.index + 1}")
-  location            = data.azurerm_resource_group.rg.location
-  resource_group_name = data.azurerm_resource_group.rg.name
-  allocation_method   = var.public_ip_allocation_method
-  sku                 = var.public_ip_sku
-  sku_tier            = var.public_ip_sku_tier
-  domain_name_label   = var.domain_name_label
-  # availability_zone   = var.public_ip_availability_zone
-  tags = merge({ "ResourceName" = lower("pip-vm-${var.virtual_machine_name}-${data.azurerm_resource_group.rg.location}-0${count.index + 1}") }, var.tags, )
+# resource "azurerm_public_ip" "pip" {
+#   count               = var.enable_public_ip_address == true ? var.instances_count : 0
+#   name                = lower("pip-vm-${var.virtual_machine_name}-${data.azurerm_resource_group.rg.location}-0${count.index + 1}")
+#   location            = data.azurerm_resource_group.rg.location
+#   resource_group_name = data.azurerm_resource_group.rg.name
+#   allocation_method   = var.public_ip_allocation_method
+#   sku                 = var.public_ip_sku
+#   sku_tier            = var.public_ip_sku_tier
+#   domain_name_label   = var.domain_name_label
+#   # availability_zone   = var.public_ip_availability_zone
+#   tags = merge({ "ResourceName" = lower("pip-vm-${var.virtual_machine_name}-${data.azurerm_resource_group.rg.location}-0${count.index + 1}") }, var.tags, )
 
-  lifecycle {
-    ignore_changes = [
-      tags,
-      ip_tags,
-    ]
-  }
-}
+#   lifecycle {
+#     ignore_changes = [
+#       tags,
+#       ip_tags,
+#     ]
+#   }
+# }
 
 #---------------------------------------
 # Network Interface for Virtual Machine
@@ -101,7 +100,7 @@ resource "azurerm_network_interface" "nic" {
     subnet_id                     = data.azurerm_subnet.snet.id
     private_ip_address_allocation = var.private_ip_address_allocation_type
     private_ip_address            = var.private_ip_address_allocation_type == "Static" ? element(concat(var.private_ip_address, [""]), count.index) : null
-    public_ip_address_id          = var.enable_public_ip_address == true ? element(concat(azurerm_public_ip.pip.*.id, [""]), count.index) : null
+  # public_ip_address_id          = var.enable_public_ip_address == true ? element(concat(data.azurerm_public_ip.pip.*.id, [""]), count.index) : null
   }
 
   lifecycle {
@@ -252,6 +251,10 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
     }
   }
 
+  # identity {
+  #   type = var.identity_type
+  # }
+
   dynamic "boot_diagnostics" {
     for_each = var.enable_boot_diagnostics ? [1] : []
     content {
@@ -324,6 +327,10 @@ resource "azurerm_windows_virtual_machine" "win_vm" {
       identity_ids = var.managed_identity_type == "UserAssigned" || var.managed_identity_type == "SystemAssigned, UserAssigned" ? var.managed_identity_ids : null
     }
   }
+
+  # identity {
+  #   type = var.identity_type
+  # }
 
   dynamic "winrm_listener" {
     for_each = var.winrm_protocol != null ? [1] : []
@@ -435,27 +442,36 @@ resource "azurerm_virtual_machine_extension" "omsagentlinux" {
   PROTECTED_SETTINGS
 }
 
+# resource "azurerm_role_assignment" "assign-vm-role" {
+#   depends_on = [
+#     azurerm_linux_virtual_machine.linux_vm, azurerm_windows_virtual_machine.win_vm
+#   ]
+#   count                = var.identity_type == "SystemAssigned" ? var.instances_count : 0
+#   scope                = var.system_assigned_vm_scope
+#   role_definition_name = var.role_vm_definition
+#   principal_id         = var.os_flavor == "windows" ? azurerm_windows_virtual_machine.win_vm[count.index].identity.id : azurerm_linux_virtual_machine.linux_vm[count.index].identity[*].id
+#   }
 
 #--------------------------------------
 # azurerm monitoring diagnostics 
 #--------------------------------------
-resource "azurerm_monitor_diagnostic_setting" "nsg" {
-  count                      = var.existing_network_security_group_id == null && var.log_analytics_workspace_id != null ? 1 : 0
-  name                       = lower("nsg-${var.virtual_machine_name}-diag")
-  target_resource_id         = azurerm_network_security_group.nsg.0.id
-  storage_account_id         = var.storage_account_name != null ? data.azurerm_storage_account.storeacc.0.id : null
-  log_analytics_workspace_id = var.log_analytics_workspace_id
+# resource "azurerm_monitor_diagnostic_setting" "nsg" {
+#   count                      = var.existing_network_security_group_id == null && var.log_analytics_workspace_id != null ? 1 : 0
+#   name                       = lower("nsg-${var.virtual_machine_name}-diag")
+#   target_resource_id         = azurerm_network_security_group.nsg.0.id
+#   storage_account_id         = var.storage_account_name != null ? data.azurerm_storage_account.storeacc.0.id : null
+#   log_analytics_workspace_id = var.log_analytics_workspace_id
 
-  dynamic "log" {
-    for_each = var.nsg_diag_logs
-    content {
-      category = log.value
-      enabled  = true
+#   dynamic "log" {
+#     for_each = var.nsg_diag_logs
+#     content {
+#       category = log.value
+#       enabled  = true
 
-      retention_policy {
-        enabled = false
-        days    = 0
-      }
-    }
-  }
-}
+#       retention_policy {
+#         enabled = false
+#         days    = 0
+#       }
+#     }
+#   }
+# }
