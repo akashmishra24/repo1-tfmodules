@@ -82,15 +82,6 @@ variable "existing_network_security_group_id" {
   default     = null
 }
 
-# variable "public_ip" {
-#   description = "Name of the Public IP that is being referred."
-# }
-
-# variable "nsg_inbound_rules" {
-#   description = "List of network rules to apply to network interface."
-#   default     = []
-# }
-
 variable "virtual_machine_name" {
   description = "The name of the virtual machine."
   default     = ""
@@ -667,16 +658,6 @@ variable "managed_identity_ids" {
   description = "A list of User Managed Identity ID's which should be assigned to the Virtual Machine."
   default     = null
 }
-
-# variable "identity_type" {
-#   description = "The type of Identity which should be assigned to the Virtual Machine. Possible values are `SystemAssigned`, `UserAssigned` and `SystemAssigned, UserAssigned`"
-#   default = null
-# }
-
-# variable "role_vm_definition" {
-#   description = "RBAC role that needs to be assigned to the VM if it is a System Assigned MI"
-#   default = null
-# }
 
 variable "winrm_protocol" {
   description = "Specifies the protocol of winrm listener. Possible values are `Http` or `Https`"

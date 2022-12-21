@@ -39,11 +39,6 @@ data "azurerm_storage_account" "storeacc" {
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
-# data "azurerm_public_ip" "public_ip" {
-#   name = var.public_ip
-#   resource_group_name = data.azurerm_resource_group.rg.name
-# }
-
 resource "random_password" "passwd" {
   count       = (var.os_flavor == "linux" && var.disable_password_authentication == false && var.admin_password == null ? 1 : (var.os_flavor == "windows" && var.admin_password == null ? 1 : 0))
   length      = var.random_password_length
@@ -56,29 +51,6 @@ resource "random_password" "passwd" {
     admin_password = var.virtual_machine_name
   }
 }
-
-#-----------------------------------
-# Public IP for Virtual Machine
-#-----------------------------------
-# resource "azurerm_public_ip" "pip" {
-#   count               = var.enable_public_ip_address == true ? var.instances_count : 0
-#   name                = lower("pip-vm-${var.virtual_machine_name}-${data.azurerm_resource_group.rg.location}-0${count.index + 1}")
-#   location            = data.azurerm_resource_group.rg.location
-#   resource_group_name = data.azurerm_resource_group.rg.name
-#   allocation_method   = var.public_ip_allocation_method
-#   sku                 = var.public_ip_sku
-#   sku_tier            = var.public_ip_sku_tier
-#   domain_name_label   = var.domain_name_label
-#   # availability_zone   = var.public_ip_availability_zone
-#   tags = merge({ "ResourceName" = lower("pip-vm-${var.virtual_machine_name}-${data.azurerm_resource_group.rg.location}-0${count.index + 1}") }, var.tags, )
-
-#   lifecycle {
-#     ignore_changes = [
-#       tags,
-#       ip_tags,
-#     ]
-#   }
-# }
 
 #---------------------------------------
 # Network Interface for Virtual Machine
@@ -148,46 +120,6 @@ resource "azurerm_availability_set" "aset" {
   }
 }
 
-#---------------------------------------------------------------
-# Network security group for Virtual Machine Network Interface
-#---------------------------------------------------------------
-# resource "azurerm_network_security_group" "nsg" {
-#   count               = var.existing_network_security_group_id == null ? 1 : 0
-#   name                = lower("nsg_${var.virtual_machine_name}_${data.azurerm_resource_group.rg.location}_in")
-#   resource_group_name = data.azurerm_resource_group.rg.name
-#   location            = data.azurerm_resource_group.rg.location
-#   tags                = merge({ "ResourceName" = lower("nsg_${var.virtual_machine_name}_${data.azurerm_resource_group.rg.location}_in") }, var.tags, )
-
-#   lifecycle {
-#     ignore_changes = [
-#       tags,
-#     ]
-#   }
-# }
-
-# resource "azurerm_network_security_rule" "nsg_rule" {
-#   for_each                    = { for k, v in local.nsg_inbound_rules : k => v if k != null }
-#   name                        = each.key
-#   priority                    = 100 * (each.value.idx + 1)
-#   direction                   = "Inbound"
-#   access                      = "Allow"
-#   protocol                    = "Tcp"
-#   source_port_range           = "*"
-#   destination_port_range      = each.value.security_rule.destination_port_range
-#   source_address_prefix       = each.value.security_rule.source_address_prefix
-#   destination_address_prefix  = element(concat(data.azurerm_subnet.snet.address_prefixes, [""]), 0)
-#   description                 = "Inbound_Port_${each.value.security_rule.destination_port_range}"
-#   resource_group_name         = data.azurerm_resource_group.rg.name
-#   network_security_group_name = azurerm_network_security_group.nsg.0.name
-#   depends_on                  = [azurerm_network_security_group.nsg]
-# }
-
-# resource "azurerm_network_interface_security_group_association" "nsgassoc" {
-#   count                     = var.instances_count
-#   network_interface_id      = element(concat(azurerm_network_interface.nic.*.id, [""]), count.index)
-#   network_security_group_id = var.existing_network_security_group_id == null ? azurerm_network_security_group.nsg.0.id : var.existing_network_security_group_id
-# }
-
 #---------------------------------------
 # Linux Virutal machine
 #---------------------------------------
@@ -250,10 +182,6 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
       identity_ids = var.managed_identity_type == "UserAssigned" || var.managed_identity_type == "SystemAssigned, UserAssigned" ? var.managed_identity_ids : null
     }
   }
-
-  # identity {
-  #   type = var.identity_type
-  # }
 
   dynamic "boot_diagnostics" {
     for_each = var.enable_boot_diagnostics ? [1] : []
@@ -327,10 +255,6 @@ resource "azurerm_windows_virtual_machine" "win_vm" {
       identity_ids = var.managed_identity_type == "UserAssigned" || var.managed_identity_type == "SystemAssigned, UserAssigned" ? var.managed_identity_ids : null
     }
   }
-
-  # identity {
-  #   type = var.identity_type
-  # }
 
   dynamic "winrm_listener" {
     for_each = var.winrm_protocol != null ? [1] : []
@@ -441,37 +365,3 @@ resource "azurerm_virtual_machine_extension" "omsagentlinux" {
     }
   PROTECTED_SETTINGS
 }
-
-# resource "azurerm_role_assignment" "assign-vm-role" {
-#   depends_on = [
-#     azurerm_linux_virtual_machine.linux_vm, azurerm_windows_virtual_machine.win_vm
-#   ]
-#   count                = var.identity_type == "SystemAssigned" ? var.instances_count : 0
-#   scope                = var.system_assigned_vm_scope
-#   role_definition_name = var.role_vm_definition
-#   principal_id         = var.os_flavor == "windows" ? azurerm_windows_virtual_machine.win_vm[count.index].identity.id : azurerm_linux_virtual_machine.linux_vm[count.index].identity[*].id
-#   }
-
-#--------------------------------------
-# azurerm monitoring diagnostics 
-#--------------------------------------
-# resource "azurerm_monitor_diagnostic_setting" "nsg" {
-#   count                      = var.existing_network_security_group_id == null && var.log_analytics_workspace_id != null ? 1 : 0
-#   name                       = lower("nsg-${var.virtual_machine_name}-diag")
-#   target_resource_id         = azurerm_network_security_group.nsg.0.id
-#   storage_account_id         = var.storage_account_name != null ? data.azurerm_storage_account.storeacc.0.id : null
-#   log_analytics_workspace_id = var.log_analytics_workspace_id
-
-#   dynamic "log" {
-#     for_each = var.nsg_diag_logs
-#     content {
-#       category = log.value
-#       enabled  = true
-
-#       retention_policy {
-#         enabled = false
-#         days    = 0
-#       }
-#     }
-#   }
-# }
