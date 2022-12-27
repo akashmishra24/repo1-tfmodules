@@ -171,7 +171,7 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
     disk_encryption_set_id    = var.disk_encryption_set_id != null? var.disk_encryption_set_id : azurerm_disk_encryption_set.des.id
     disk_size_gb              = var.disk_size_gb
     write_accelerator_enabled = var.enable_os_disk_write_accelerator
-    name                      = join("-", [azurerm_linux_virtual_machine.linux_vm.name, "osdisk"])
+    name                      = join("-", [azurerm_linux_virtual_machine.linux_vm[count.index].name, "osdisk"])
   }
 
   additional_capabilities {
