@@ -172,10 +172,29 @@ variable "admin_ssh_key_data" {
   default     = null
 }
 
-# variable "system_assigned_vm_scope" {
-#   description = "Scope of the System Assigned MI enabled for the VM."
-#   default = "/subscriptions/5d798471-bf04-46ec-8de0-8e42a4c1da3e/resourceGroups/Terraform-State-File/providers/Microsoft.Storage/storageAccounts/mytfstatefile"
-# }
+variable "storage_rg" {
+ default = "Hub-RG"
+}
+
+variable "disk_encryption_set_name" {
+  default = "des-01"
+}
+variable "des_count" {
+  default = 1
+}
+variable "key_vault_name" {
+  description = "Specify the name of the KV that has the customer managed key stored"
+  default = "kv-test-estm"
+}
+
+variable "key_vault_rg_name" {
+  description = "RG name of the KV with customer managed key"
+  default = "Hub-RG"
+}
+
+variable "key_vault_key_name" {
+ default = "cmk1"
+}
 
 variable "custom_image" {
   description = "Provide the custom image to this module if the default variants are not sufficient"
@@ -721,7 +740,7 @@ variable "log_analytics_workspace_primary_shared_key" {
 
 variable "storage_account_name" {
   description = "The name of the hub storage account to store logs"
-  default     = null
+  default     = "fghdjdtyj"
 }
 
 variable "deploy_log_analytics_agent" {
