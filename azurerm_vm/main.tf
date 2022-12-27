@@ -10,20 +10,12 @@ locals {
   secret_permissions = ["Get"]
 }
 
+#---------------------------------------------------------------
+# Data Sources
+#---------------------------------------------------------------
+
 data "azurerm_client_config" "current" {}
 
-#---------------------------------------------------------------
-# Generates SSH2 key Pair for Linux VM's (Dev Environment only)
-#---------------------------------------------------------------
-resource "tls_private_key" "rsa" {
-  count     = var.generate_admin_ssh_key ? 1 : 0
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
-
-#----------------------------------------------------------
-# Resource Group, VNet, Subnet, Key Vault selection & Random Resources
-#----------------------------------------------------------
 data "azurerm_resource_group" "rg" {
   name = var.resource_group_name
 }
@@ -50,6 +42,19 @@ data "azurerm_key_vault" "kv" {
   name                = var.key_vault_name
   resource_group_name = var.key_vault_rg_name
 }
+
+#---------------------------------------------------------------
+# Generates SSH2 key Pair for Linux VM's (Dev Environment only)
+#---------------------------------------------------------------
+resource "tls_private_key" "rsa" {
+  count     = var.generate_admin_ssh_key ? 1 : 0
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+#----------------------------------------------------------
+# Key Vault Key & Random Password Resource
+#----------------------------------------------------------
 
 resource "azurerm_key_vault_key" "kv_key" {
   name         = var.key_vault_key_name
@@ -84,7 +89,7 @@ resource "azurerm_network_interface" "nic" {
   enable_ip_forwarding          = var.enable_ip_forwarding
   enable_accelerated_networking = var.enable_accelerated_networking
   internal_dns_name_label       = var.internal_dns_name_label
-  tags                          = var.tags
+  tags                          = merge({ "ResourceName" = var.instances_count == 1 ? lower("nic-${format("vm%s", lower(replace(var.virtual_machine_name, "/[[:^alnum:]]/", "")))}") : lower("nic-${format("vm%s%s", lower(replace(var.virtual_machine_name, "/[[:^alnum:]]/", "")), count.index + 1)}") }, var.tags, )
 
   ip_configuration {
     name                          = lower("ipconig-${format("vm%s%s", lower(replace(var.virtual_machine_name, "/[[:^alnum:]]/", "")), count.index + 1)}")
@@ -284,6 +289,10 @@ resource "azurerm_windows_virtual_machine" "win_vm" {
     create_before_destroy = true
   }
 }
+
+#-------------------------------------------------------------------------
+# Disk encryption set, Key Vault access policy, Key Vault role assignment
+#-------------------------------------------------------------------------
 
 resource "azurerm_disk_encryption_set" "des" {
 # count            = local.cmk_enabled_virtual_machines == true? var.des_count : 0
