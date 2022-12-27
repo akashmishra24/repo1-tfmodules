@@ -193,7 +193,7 @@ variable "key_vault_rg_name" {
 }
 
 variable "key_vault_key_name" {
- default = "cmk1"
+ default = ""
 }
 
 variable "custom_image" {
