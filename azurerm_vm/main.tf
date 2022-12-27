@@ -84,7 +84,7 @@ resource "azurerm_network_interface" "nic" {
   enable_ip_forwarding          = var.enable_ip_forwarding
   enable_accelerated_networking = var.enable_accelerated_networking
   internal_dns_name_label       = var.internal_dns_name_label
-  tags                          = merge({ "ResourceName" = var.instances_count == 1 ? lower("nic-${format("vm%s", lower(replace(var.virtual_machine_name, "/[[:^alnum:]]/", "")))}") : lower("nic-${format("vm%s%s", lower(replace(var.virtual_machine_name, "/[[:^alnum:]]/", "")), count.index + 1)}") }, var.tags, )
+  tags                          = var.tags
 
   ip_configuration {
     name                          = lower("ipconig-${format("vm%s%s", lower(replace(var.virtual_machine_name, "/[[:^alnum:]]/", "")), count.index + 1)}")
