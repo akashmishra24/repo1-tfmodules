@@ -1,10 +1,16 @@
 locals {
-   vm_data_disks = { for idx, data_disk in var.data_disks : data_disk.name => {
-    idx : idx,
-    data_disk : data_disk,
-    }
-  }
+  cmk_enabled_virtual_machines = true
+  vm_data_disks = {}
+  #{ for idx, data_disk in var.data_disks : data_disk.name => {
+  #   idx : idx,
+  #   data_disk : data_disk,
+  #   }
+  # }
+  key_permissions = ["Get", "Create", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify"]
+  secret_permissions = ["Get"]
 }
+
+data "azurerm_client_config" "current" {}
 
 #---------------------------------------------------------------
 # Generates SSH2 key Pair for Linux VM's (Dev Environment only)
@@ -16,7 +22,7 @@ resource "tls_private_key" "rsa" {
 }
 
 #----------------------------------------------------------
-# Resource Group, VNet, Subnet selection & Random Resources
+# Resource Group, VNet, Subnet, Key Vault selection & Random Resources
 #----------------------------------------------------------
 data "azurerm_resource_group" "rg" {
   name = var.resource_group_name
@@ -34,9 +40,23 @@ data "azurerm_subnet" "snet" {
 }
 
 data "azurerm_storage_account" "storeacc" {
-  count               = var.storage_account_name != null ? 1 : 0
+  # count               = var.storage_account_name != null ? 1 : 0
   name                = var.storage_account_name
-  resource_group_name = data.azurerm_resource_group.rg.name
+  resource_group_name = var.storage_rg
+}
+
+data "azurerm_key_vault" "kv" {
+  # count               = var.key_vault_name != null ? 1 : 0
+  name                = var.key_vault_name
+  resource_group_name = var.key_vault_rg_name
+}
+
+resource "azurerm_key_vault_key" "kv_key" {
+  name         = var.key_vault_key_name
+  key_vault_id = data.azurerm_key_vault.kv.id
+  key_type     = "RSA"
+  key_size     = 4096
+  key_opts     = ["decrypt", "encrypt", "sign", "unwrapKey", "verify", "wrapKey", ]
 }
 
 resource "random_password" "passwd" {
@@ -72,13 +92,7 @@ resource "azurerm_network_interface" "nic" {
     subnet_id                     = data.azurerm_subnet.snet.id
     private_ip_address_allocation = var.private_ip_address_allocation_type
     private_ip_address            = var.private_ip_address_allocation_type == "Static" ? element(concat(var.private_ip_address, [""]), count.index) : null
-  # public_ip_address_id          = var.enable_public_ip_address == true ? element(concat(data.azurerm_public_ip.pip.*.id, [""]), count.index) : null
-  }
-
-  lifecycle {
-    ignore_changes = [
-      tags,
-    ]
+    # public_ip_address_id          = var.enable_public_ip_address == true ? element(concat(data.azurerm_public_ip.pip.*.id, [""]), count.index) : null
   }
 }
 
@@ -90,13 +104,8 @@ resource "azurerm_proximity_placement_group" "appgrp" {
   name                = lower("proxigrp-${var.virtual_machine_name}-${data.azurerm_resource_group.rg.location}")
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = data.azurerm_resource_group.rg.location
-  tags                = merge({ "ResourceName" = lower("proxigrp-${var.virtual_machine_name}-${data.azurerm_resource_group.rg.location}") }, var.tags, )
+  tags                = var.tags
 
-  lifecycle {
-    ignore_changes = [
-      tags,
-    ]
-  }
 }
 
 #-----------------------------------------------------
@@ -111,13 +120,7 @@ resource "azurerm_availability_set" "aset" {
   platform_update_domain_count = var.platform_update_domain_count
   proximity_placement_group_id = var.enable_proximity_placement_group ? azurerm_proximity_placement_group.appgrp.0.id : null
   managed                      = true
-  tags                         = merge({ "ResourceName" = lower("avail-${var.virtual_machine_name}-${data.azurerm_resource_group.rg.location}") }, var.tags, )
-
-  lifecycle {
-    ignore_changes = [
-      tags,
-    ]
-  }
+  tags                         = var.tags
 }
 
 #---------------------------------------
@@ -142,7 +145,7 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
   encryption_at_host_enabled      = var.enable_encryption_at_host
   proximity_placement_group_id    = var.enable_proximity_placement_group ? azurerm_proximity_placement_group.appgrp.0.id : null
   zone                            = var.vm_availability_zone
-  tags                            = merge({ "ResourceName" = var.instances_count == 1 ? var.virtual_machine_name : format("%s%s", lower(replace(var.virtual_machine_name, "/[[:^alnum:]]/", "")), count.index + 1) }, var.tags, )
+  tags                            = var.tags
 
   dynamic "admin_ssh_key" {
     for_each = var.disable_password_authentication ? [1] : []
@@ -165,10 +168,10 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
   os_disk {
     storage_account_type      = var.os_disk_storage_account_type
     caching                   = var.os_disk_caching
-    disk_encryption_set_id    = var.disk_encryption_set_id
+    disk_encryption_set_id    = var.disk_encryption_set_id != null? var.disk_encryption_set_id : azurerm_disk_encryption_set.des.id
     disk_size_gb              = var.disk_size_gb
     write_accelerator_enabled = var.enable_os_disk_write_accelerator
-    name                      = var.os_disk_name
+    name                      = join("-", [azurerm_linux_virtual_machine.linux_vm.name, "osdisk"])
   }
 
   additional_capabilities {
@@ -186,14 +189,12 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
   dynamic "boot_diagnostics" {
     for_each = var.enable_boot_diagnostics ? [1] : []
     content {
-      storage_account_uri = var.storage_account_name != null ? data.azurerm_storage_account.storeacc.0.primary_blob_endpoint : var.storage_account_uri
+      storage_account_uri = var.storage_account_name != null ? data.azurerm_storage_account.storeacc.primary_blob_endpoint : var.storage_account_uri
     }
   }
 
   lifecycle {
-    ignore_changes = [
-      tags,
-    ]
+    create_before_destroy = true
   }
 }
 
@@ -223,7 +224,7 @@ resource "azurerm_windows_virtual_machine" "win_vm" {
   patch_mode                   = var.patch_mode
   zone                         = var.vm_availability_zone
   timezone                     = var.vm_time_zone
-  tags                         = merge({ "ResourceName" = var.instances_count == 1 ? var.virtual_machine_name : format("%s%s", lower(replace(var.virtual_machine_name, "/[[:^alnum:]]/", "")), count.index + 1) }, var.tags, )
+  tags                         = var.tags
 
   dynamic "source_image_reference" {
     for_each = var.source_image_id != null ? [] : [1]
@@ -280,11 +281,40 @@ resource "azurerm_windows_virtual_machine" "win_vm" {
   }
 
   lifecycle {
-    ignore_changes = [
-      tags,
-      patch_mode,
-    ]
+    create_before_destroy = true
   }
+}
+
+resource "azurerm_disk_encryption_set" "des" {
+# count            = local.cmk_enabled_virtual_machines == true? var.des_count : 0
+  name                = "${var.disk_encryption_set_name}-des"
+  resource_group_name = data.azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
+  key_vault_key_id    = azurerm_key_vault_key.kv_key.id
+
+  identity {
+    type = "SystemAssigned"
+  }
+  tags = var.tags
+}
+
+resource "azurerm_key_vault_access_policy" "cmk" {
+  # for_each     = local.cmk_enabled_virtual_machines
+  key_vault_id = data.azurerm_key_vault.kv.id
+
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = azurerm_disk_encryption_set.des.identity.0.principal_id
+
+  key_permissions    = local.key_permissions
+  secret_permissions = local.secret_permissions
+}
+
+resource "azurerm_role_assignment" "kv_role" {
+  count                            = local.cmk_enabled_virtual_machines == true? var.des_count : 0
+  scope                            = data.azurerm_key_vault.kv.id
+  role_definition_name             = "Reader"
+  principal_id                     = var.disk_encryption_set_id != null? var.disk_encryption_set_id : azurerm_disk_encryption_set.des.identity.0.principal_id
+  skip_service_principal_aad_check = true
 }
 
 #---------------------------------------
@@ -300,11 +330,6 @@ resource "azurerm_managed_disk" "data_disk" {
   disk_size_gb         = each.value.data_disk.disk_size_gb
   tags                 = merge({ "ResourceName" = "${var.virtual_machine_name}_DataDisk_${each.value.idx}" }, var.tags, )
 
-  lifecycle {
-    ignore_changes = [
-      tags,
-    ]
-  }
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "data_disk" {
