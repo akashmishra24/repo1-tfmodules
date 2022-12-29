@@ -13,7 +13,7 @@ on:
 jobs:
   tag_repo:
     name: Get runner id and tag the current code snapshot
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Tag and push current repo code
