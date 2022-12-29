@@ -1,0 +1,22 @@
+name: Tagging the TF Modules
+
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  tag_repo:
+    name: Get runner id and tag the current code snapshot
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      - name: Tag and push current repo code
+        run: |
+          git tag ${{github.run_id}}
+          git push origin ${{github.run_id}}
