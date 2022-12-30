@@ -10,7 +10,7 @@ on:
     branches: [ "main" ]
     paths-ignore: "./github/workflows/tag_modules.yml"
 
-  # Allows you to run this workflow manually from the Actions tab
+# Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
