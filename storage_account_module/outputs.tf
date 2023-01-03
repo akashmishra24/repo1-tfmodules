@@ -124,3 +124,34 @@ output "sa_advanced_threat_protection" {
   value       = [for x in azurerm_advanced_threat_protection.this : x.target_resource_id]
   description = "Storage account advanced threat protection ID"
 }
+
+# - Security Control output
+output "sa_https_traffic" {
+  value       = { for x in azurerm_storage_account.this : x.name => x.enable_https_traffic_only }
+  description = "Storage account HTTPS traffic"
+}
+
+output "sa_tls_version" {
+  value       = { for x in azurerm_storage_account.this : x.name => x.min_tls_version }
+  description = "Storage account TLS version"
+}
+
+output "sa_access_tier" {
+  value       = { for x in azurerm_storage_account.this : x.name => x.access_tier }
+  description = "Storage account access tier"
+}
+
+output "sa_account_kind" {
+  value       = { for x in azurerm_storage_account.this : x.name => x.account_kind }
+  description = "Storage account kind"
+}
+
+output "sa_account_replication_type" {
+  value       = { for x in azurerm_storage_account.this : x.name => x.account_replication_type }
+  description = "Storage account replication type"
+}
+
+output "sa_account_tier" {
+  value       = { for x in azurerm_storage_account.this : x.name => x.account_tier }
+  description = "Storage account tier"
+}
