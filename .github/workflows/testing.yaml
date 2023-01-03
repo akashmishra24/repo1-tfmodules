@@ -11,11 +11,11 @@ jobs:
   go-tests:
     name: Run Go Unit Tests (terratest)
     runs-on: ubuntu-latest
-    env:
-      ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+    #env:
+    #  ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
+    #  ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+    #  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    #  ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-go@v1
@@ -35,6 +35,9 @@ jobs:
       #    tenant-id: ${{ secrets.AZURE_AD_TENANT_ID }}
       #    subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       #    client-secret: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+      - uses: Azure/login@v1
+        with:
+          creds: '{"clientId":"${{ secrets.AZURE_AD_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_AD_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_AD_TENANT_ID }}"}'
       - name: Run tests
         working-directory: storage_account_module/test
         run: go test -v -tags=unit
