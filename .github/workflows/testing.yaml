@@ -11,6 +11,15 @@ jobs:
   go-tests:
     name: Run Go Unit Tests (terratest)
     runs-on: ubuntu-latest #self-hosted
+    env:
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+      ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
     #env:
     #  ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
     #  ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
@@ -41,13 +50,13 @@ jobs:
       - name: Run tests
         working-directory: storage_account_module/test
         run: go test -v -tags=unit
-        env:
-          ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
-          AZURE_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
-          ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
-          AZURE_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
-          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+        #env:
+        #  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        #  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        #  ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+        #  AZURE_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
+        #  ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
+        #  AZURE_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
+        #  ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+        #  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
           
