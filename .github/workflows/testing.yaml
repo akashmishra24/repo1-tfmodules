@@ -23,6 +23,13 @@ jobs:
       - name: Download Go modules
         working-directory: storage_account_module/test
         run: go mod download
+      - name: 'Az CLI login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_AD_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_AD_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-secret: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
       - name: Run tests
         working-directory: storage_account_module/test
         run: go test -v -tags=unit
