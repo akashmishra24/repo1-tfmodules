@@ -7,13 +7,40 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var (
+	globalEnvVars = make(map[string]string)
+)
+
+
+func setTerraformVariables() (map[string]string, error) {
+
+	// Getting enVars from environment variables
+	ARM_CLIENT_ID := os.Getenv("AZURE_CLIENT_ID")
+	ARM_CLIENT_SECRET := os.Getenv("AZURE_CLIENT_SECRET")
+	ARM_TENANT_ID := os.Getenv("AZURE_TENANT_ID")
+	ARM_SUBSCRIPTION_ID := os.Getenv("AZURE_SUBSCRIPTION_ID")
+
+	// Creating globalEnVars for terraform call through Terratest
+	if ARM_CLIENT_ID != "" {
+		globalEnvVars["ARM_CLIENT_ID"] = ARM_CLIENT_ID
+		globalEnvVars["ARM_CLIENT_SECRET"] = ARM_CLIENT_SECRET
+		globalEnvVars["ARM_SUBSCRIPTION_ID"] = ARM_SUBSCRIPTION_ID
+		globalEnvVars["ARM_TENANT_ID"] = ARM_TENANT_ID
+	}
+
+	return globalEnvVars, nil
+}
+
 func TestTerraformStorageAcct(t *testing.T) {
+	setTerraformVariables()
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: "./",
 		VarFiles:     []string{"terratest_input.tfvars"},
+		// globalvariables for user account
+		EnvVars: globalEnvVars,
 	})
-
+	
 	// GenOutput generates the output string to be asserted against
 	GenOutput := func(outputName string) (generated string) {
 		generated = terraform.Output(t, terraformOptions, outputName)
