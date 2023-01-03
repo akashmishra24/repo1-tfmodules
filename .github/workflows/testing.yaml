@@ -11,6 +11,11 @@ jobs:
   go-tests:
     name: Run Go Unit Tests (terratest)
     runs-on: ubuntu-latest
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-go@v1
@@ -23,13 +28,13 @@ jobs:
       - name: Download Go modules
         working-directory: storage_account_module/test
         run: go mod download
-      - name: 'Az CLI login'
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZURE_AD_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_AD_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          client-secret: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+      #- name: 'Az CLI login'
+      #  uses: azure/login@v1
+      #  with:
+      #    client-id: ${{ secrets.AZURE_AD_CLIENT_ID }}
+      #    tenant-id: ${{ secrets.AZURE_AD_TENANT_ID }}
+      #    subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      #    client-secret: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
       - name: Run tests
         working-directory: storage_account_module/test
         run: go test -v -tags=unit
