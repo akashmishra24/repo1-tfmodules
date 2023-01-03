@@ -22,10 +22,10 @@ func setTerraformVariables() (map[string]string, error) {
 
 	// Creating globalEnVars for terraform call through Terratest
 	if ARM_CLIENT_ID != "" {
-		globalEnvVars["ARM_CLIENT_ID"] = ARM_CLIENT_ID
-		globalEnvVars["ARM_CLIENT_SECRET"] = ARM_CLIENT_SECRET
-		globalEnvVars["ARM_SUBSCRIPTION_ID"] = ARM_SUBSCRIPTION_ID
-		globalEnvVars["ARM_TENANT_ID"] = ARM_TENANT_ID
+		globalEnvVars["AZURE_CLIENT_ID"] = ARM_CLIENT_ID
+		globalEnvVars["AZURE_CLIENT_SECRET"] = ARM_CLIENT_SECRET
+		globalEnvVars["AZURE_SUBSCRIPTION_ID"] = ARM_SUBSCRIPTION_ID
+		globalEnvVars["AZURE_TENANT_ID"] = ARM_TENANT_ID
 	}
 
 	return globalEnvVars, nil
