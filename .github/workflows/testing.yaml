@@ -10,7 +10,7 @@ on:
 jobs:
   go-tests:
     name: Run Go Unit Tests (terratest)
-    runs-on: self-hosted #ubuntu-latest 
+    runs-on: ubuntu-latest #self-hosted
     #env:
     #  ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
     #  ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
