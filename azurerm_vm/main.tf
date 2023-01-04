@@ -27,13 +27,11 @@ data "azurerm_subnet" "snet" {
 }
 
 data "azurerm_storage_account" "storeacc" {
-  # count               = var.storage_account_name != null ? 1 : 0
   name                = var.storage_account_name
   resource_group_name = var.storage_rg
 }
 
 data "azurerm_key_vault" "kv" {
-  # count               = var.key_vault_name != null ? 1 : 0
   name                = var.key_vault_name
   resource_group_name = var.key_vault_rg_name
 }
@@ -303,12 +301,9 @@ resource "azurerm_disk_encryption_set" "des" {
 }
 
 resource "azurerm_key_vault_access_policy" "cmk" {
-  # for_each     = local.cmk_enabled_virtual_machines
   key_vault_id = data.azurerm_key_vault.kv.id
-
   tenant_id = data.azurerm_client_config.current.tenant_id
   object_id = azurerm_disk_encryption_set.des.identity.0.principal_id
-
   key_permissions    = local.key_permissions
   secret_permissions = local.secret_permissions
 }
