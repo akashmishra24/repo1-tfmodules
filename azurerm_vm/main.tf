@@ -1,11 +1,6 @@
 locals {
   cmk_enabled_virtual_machines = true
   vm_data_disks = {}
-  #{ for idx, data_disk in var.data_disks : data_disk.name => {
-  #   idx : idx,
-  #   data_disk : data_disk,
-  #   }
-  # }
   key_permissions = ["Get", "Create", "List", "Restore", "Recover", "UnwrapKey", "WrapKey", "Purge", "Encrypt", "Decrypt", "Sign", "Verify"]
   secret_permissions = ["Get"]
 }
