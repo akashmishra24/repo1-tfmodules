@@ -46,7 +46,6 @@ resource "azurerm_kubernetes_cluster" "this" {
   kubernetes_version  = var.kubernetes_version
   sku_tier            = var.sku_tier
 
-  api_server_authorized_ip_ranges = var.api_server_authorized_ip_ranges != [] ? var.api_server_authorized_ip_ranges : null
   private_cluster_enabled         = var.private_cluster_enabled
 
   default_node_pool {
