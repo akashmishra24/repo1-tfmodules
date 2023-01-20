@@ -6,6 +6,9 @@ variable "virtual_network_name" {
   type = string
 }
 
+variable "subnet_name" {
+}
+
 variable "location" {
   type = string
 }
