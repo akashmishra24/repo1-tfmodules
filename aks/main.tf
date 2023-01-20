@@ -54,7 +54,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     vm_size         = var.default_node_pool_vm_size
     os_disk_size_gb = var.default_node_pool_os_disk_size_gb
     node_count      = var.default_node_pool_node_count
-    vnet_subnet_id  = var.default_node_pool_vnet_subnet_id != "" ? var.default_node_pool_vnet_subnet_id : null
+    vnet_subnet_id  = data.azurerm_subnet.snet.id # var.default_node_pool_vnet_subnet_id != "" ? var.default_node_pool_vnet_subnet_id : null
     tags            = var.tags
   }
 
