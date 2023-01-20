@@ -1,9 +1,24 @@
+data "azurerm_resource_group" "rg" {
+  name = var.resource_group_name
+}
+
+data "azurerm_virtual_network" "vnet" {
+  name                = var.virtual_network_name
+  resource_group_name = data.azurerm_resource_group.rg.name
+}
+
+data "azurerm_subnet" "snet" {
+  name                 = var.subnet_name
+  virtual_network_name = data.azurerm_virtual_network.vnet.name
+  resource_group_name  = data.azurerm_resource_group.rg.name
+}
+
 resource "azurerm_log_analytics_workspace" "this" {
   count = var.enable_oms_agent ? 1 : 0
 
   name                = "law-${var.dns_prefix}"
-  resource_group_name = var.resource_group_name
-  location            = var.location
+  resource_group_name = data.azurerm_resource_group.rg.name
+  location            = data.azurerm_resource_group.rg.location
   sku                 = "PerGB2018"
 }
 
@@ -13,8 +28,8 @@ resource "azurerm_log_analytics_solution" "this" {
   solution_name         = "Containers"
   workspace_resource_id = azurerm_log_analytics_workspace.this.0.id
   workspace_name        = azurerm_log_analytics_workspace.this.0.name
-  location              = var.location
-  resource_group_name   = var.resource_group_name
+  location              = data.azurerm_resource_group.rg.location
+  resource_group_name   = data.azurerm_resource_group.rg.name
 
   plan {
     publisher = "Microsoft"
@@ -24,10 +39,10 @@ resource "azurerm_log_analytics_solution" "this" {
 
 resource "azurerm_kubernetes_cluster" "this" {
   name                = var.name
-  location            = var.location
-  resource_group_name = var.resource_group_name
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
   dns_prefix          = var.dns_prefix
-  node_resource_group = var.node_resource_group_name
+  node_resource_group = data.azurerm_resource_group.rg.name
   kubernetes_version  = var.kubernetes_version
   sku_tier            = var.sku_tier
 
