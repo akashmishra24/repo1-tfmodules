@@ -99,26 +99,24 @@ resource "azurerm_kubernetes_cluster" "this" {
     }
   }
 
-  role_based_access_control {
-    enabled = false
-  }
+#   role_based_access_control {
+#     enabled = false
+#   }
 
-  addon_profile {
-    aci_connector_linux {
-      enabled = false
-    }
+#   addon_profile {
+#     aci_connector_linux {
+#       enabled = false
+#     }
 
-    azure_policy {
-      enabled = false
-    }
+#     azure_policy {
+#       enabled = false
+#     }
 
-    http_application_routing {
-      enabled = false
-    }
+#     http_application_routing {
+#       enabled = false
+#     }
 
-    kube_dashboard {
-      enabled = var.enable_kube_dashboard
-    }
+    kube_dashboard_enabled = var.enable_kube_dashboard
 
     dynamic oms_agent {
       for_each = var.enable_oms_agent ? ["present"] : []
