@@ -1,3 +1,7 @@
+locals {
+  location = "eastus"
+}
+
 resource "azurerm_resource_group" "test" {
   name     = var.resource_group_name
   location = local.location
