@@ -11,16 +11,12 @@ on:
 jobs:
   go-tests:
     name: Run Go Unit Tests (terratest)
-    runs-on: ubuntu-latest #self-hosted
+    runs-on: ubuntu-latest
     env:
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
-      AZURE_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
       ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
-      AZURE_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
-      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
+      ARM_USE_MSI: true
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-go@v1
