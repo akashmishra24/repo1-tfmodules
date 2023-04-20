@@ -1,4 +1,9 @@
-module "KeyVault" {
+resource "azurerm_resource_group" "test" {
+  name     = var.resource_group_name
+  location = local.location
+}
+
+module "Key_vault_test" {
   source              = "../"
   resource_group_name = var.resource_group_name
   #storage_account_ids_map          = module.StorageAccount.sa_ids_map
@@ -14,4 +19,8 @@ module "KeyVault" {
   #log_analytics_workspace_id       = var.log_analytics_workspace_id
   #diagnostics_storage_account_name = var.diagnostics_storage_account_name
   #kv_additional_tags               = var.additional_tags
+  
+  depends_on = [
+    azurerm_resource_group.test
+  ]
 }
