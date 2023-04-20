@@ -1,4 +1,4 @@
-name                            = "kv-${var.workload}-${data.azurerm_resource_group.rg.location}-${var.environment}"
+name                            = "kv-eastus-testing"
 location                        = "eastus"
 resource_group_name             = "tf-strg-acct-testing"
 enabled_for_disk_encryption     = "false"
