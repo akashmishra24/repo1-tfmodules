@@ -20,6 +20,7 @@ module "key_vault_test" {
   sku_name                        = var.sku_name
   subnet_name                     = var.subnet_name
   virtual_network_name            = var.virtual_network_name
+  tenant_id                       = var.tenant_id
   #access_policies                 = var.access_policies
   network_acls                    = var.network_acls
   #log_analytics_workspace_id       = var.log_analytics_workspace_id
