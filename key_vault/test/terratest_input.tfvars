@@ -10,3 +10,14 @@ enabled_for_template_deployment = "true"
 enable_rbac_authorization       = "false"
 public_network_access_enabled   = "false"
 network_acls                    = null
+
+
+access_policies = {
+  "accp1" = {
+    group_names             = ["test1", "test2"]
+    certificate_permissions = ["get", "list"]
+    key_permissions         = ["get", "list"]
+    secret_permissions      = ["get", "list"]
+    storage_permissions     = ["get", "list"]
+  }
+}
