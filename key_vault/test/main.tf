@@ -11,7 +11,7 @@ module "key_vault_test" {
   source              = "../"
   resource_group_name = azurerm_resource_group.test.name
   #storage_account_ids_map          = module.StorageAccount.sa_ids_map
-  name                            = var.keyvault_name
+  name                            = var.name
   #soft_delete_enabled             = var.soft_delete_enabled
   purge_protection_enabled        = var.purge_protection_enabled
   enabled_for_deployment          = var.enabled_for_deployment
