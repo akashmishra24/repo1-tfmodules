@@ -4,7 +4,7 @@ variable "private_zone_id" {
   default = null
 }
 
-variable "keyvault_name" {
+variable "name" {
   type    = string
 }
 
