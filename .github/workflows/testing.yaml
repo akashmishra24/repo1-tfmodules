@@ -35,4 +35,4 @@ jobs:
         run: go mod download
       - name: Run tests
         working-directory: key_vault/test
-        run: go test -v -tags=unit
+        run: go test -tags azure .
