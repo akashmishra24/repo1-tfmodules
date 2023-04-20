@@ -16,11 +16,11 @@ variable "resource_group_name" {}
 
 variable "virtual_network_name" {
   type    = string
-  default = {}
+  default = "app-eastus-vnet"
 }
 
 variable "subnet_name" {
-  default = {}
+  default = "app-eastus-snet"
   type    = string
 }
 
