@@ -41,7 +41,8 @@ func TestTerraformStorageAcct(t *testing.T) {
 
 	// website::tag::4:: Determine whether the keyvault exists
 	// keyVault := azure.GetKeyVault(t, resourceGroupName, keyVaultName, "")
-	assert.Equal(t, keyVaultName, *keyVault.Name)
+	assert.Equal(t, "[tf-strg-acct-testing]", resourceGroupName)
+	assert.Equal(t, "[kv-eastus-testing]", keyVaultName)
 
 	// website::tag::5:: Determine whether the secret, key, and certificate exists
 	//secretExists := azure.KeyVaultSecretExists(t, keyVaultName, expectedSecretName)
