@@ -24,9 +24,9 @@ module "key_vault_test" {
   #diagnostics_storage_account_name = var.diagnostics_storage_account_name
   #kv_additional_tags               = var.additional_tags
   
-  depends_on = [
-    azurerm_resource_group.test
-  ]
+  #depends_on = [
+   # azurerm_resource_group.test
+  #]
 }
   
  
