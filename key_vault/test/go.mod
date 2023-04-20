@@ -1,4 +1,4 @@
-module terraform-azure-storage-account
+module terraform-azure-key-vault
 
 go 1.13
 
