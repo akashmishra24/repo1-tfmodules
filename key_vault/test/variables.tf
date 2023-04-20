@@ -1,12 +1,4 @@
-variable "environment" {
-  description = "Prod or Non-Prod or Dev etc"
-  default     = "Dev"
-}
 
-variable "workload" {
-  description = "Name of the application or workload"
-  default     = "app"
-}
 
 variable "private_zone_id" {
   default = null
