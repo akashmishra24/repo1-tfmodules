@@ -33,14 +33,14 @@ func TestTerraformStorageAcct(t *testing.T) {
 	terraform.InitAndApply(t, terraformOptions)
 
 	// website::tag::3:: Run `terraform output` to get the values of output variables
-	resourceGroupName := GenOutput("resource_group_name")
+	resourceGroupName := GenOutput("resource_group")
 	keyVaultName := GenOutput("key_vault_name")
-	expectedSecretName := GenOutput("secret_name")
-	expectedKeyName := GenOutput("key_name")
-	expectedCertificateName := GenOutput("certificate_name")
+	secretName := GenOutput("secret_name")
+	keyName := GenOutput("key_name")
+	certificateName := GenOutput("certificate_name")
 
 	// website::tag::4:: Determine whether the keyvault exists
-	//keyVault := azure.GetKeyVault(t, resourceGroupName, keyVaultName, "")
+	keyVault := azure.GetKeyVault(t, resourceGroupName, keyVaultName, "")
 	assert.Equal(t, keyVaultName, *keyVault.Name)
 
 	// website::tag::5:: Determine whether the secret, key, and certificate exists
