@@ -21,7 +21,7 @@ func TestTerraformAzureKeyVaultExample(t *testing.T) {
 	// website::tag::1:: Configure Terraform setting up a path to Terraform code.
 	terraformOptions := &terraform.Options{
 		// The path to where our Terraform code is located
-		TerraformDir: "../../examples/azure/terraform-azure-keyvault-example",
+		TerraformDir: "./",
 		Vars: map[string]interface{}{
 			"postfix": uniquePostfix,
 		},
