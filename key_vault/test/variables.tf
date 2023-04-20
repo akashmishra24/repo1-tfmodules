@@ -4,6 +4,10 @@ variable "private_zone_id" {
   default = null
 }
 
+variable "keyvault_name" {
+  type    = string
+}
+
 variable "resource_group_name" {}
 
 variable "virtual_network_name" {
