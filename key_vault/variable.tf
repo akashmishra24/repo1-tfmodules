@@ -13,6 +13,10 @@ variable "subnet_name" {
   type = string
 }
 
+variable "name" {
+  type = string
+}
+
 variable "tenant_id" {
 
 }
