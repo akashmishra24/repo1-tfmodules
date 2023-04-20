@@ -1,6 +1,6 @@
 name                            = "kv-${var.workload}-${data.azurerm_resource_group.rg.location}-${var.environment}"
-location                        = "West Europe"
-resource_group_name             = "samplerg"
+location                        = "eastus"
+resource_group_name             = "tf-strg-acct-testing"
 enabled_for_disk_encryption     = "false"
 soft_delete_retention_days      = 7
 purge_protection_enabled        = "false"
