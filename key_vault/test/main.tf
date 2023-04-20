@@ -7,7 +7,7 @@ resource "azurerm_resource_group" "test" {
   location = local.location
 }
 
-module "Key_vault_test" {
+module "key_vault_test" {
   source              = "../"
   resource_group_name = azurerm_resource_group.test.name
   #storage_account_ids_map          = module.StorageAccount.sa_ids_map
