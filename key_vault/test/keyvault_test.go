@@ -16,14 +16,12 @@ import (
 func TestTerraformAzureKeyVaultExample(t *testing.T) {
 	t.Parallel()
 
-	uniquePostfix := random.UniqueId()
-
-	// website::tag::1:: Configure Terraform setting up a path to Terraform code.
-	terraformOptions := &terraform.Options{
+    terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
+		// Set the path to the Terraform code that will be tested.
 		// The path to where our Terraform code is located
-		TerraformDir: "./",
-		VarFiles:     []string{"terratest_input.tfvars"},
-	}
+        TerraformDir: "./",
+        VarFiles:     []string{"terratest_input.tfvars"},
+    })
 
 	// website::tag::6:: At the end of the test, run `terraform destroy` to clean up any resources that were created
 	defer terraform.Destroy(t, terraformOptions)
