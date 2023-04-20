@@ -13,18 +13,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestTerraformAzureKeyVaultExample(t *testing.T) {
-	t.Parallel()
-
-	uniquePostfix := random.UniqueId()
-
-	// website::tag::1:: Configure Terraform setting up a path to Terraform code.
-	terraformOptions := &terraform.Options{
-		// The path to where our Terraform code is located
+func TestTerraformStorageAcct(t *testing.T) {
+	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
+		// Set the path to the Terraform code that will be tested.
 		TerraformDir: "./",
-		Vars: map[string]interface{}{
-			"postfix": uniquePostfix,
-		},
+		VarFiles:     []string{"terratest_input.tfvars"},
+	})
+	
+	// GenOutput generates the output string to be asserted against
+	GenOutput := func(outputName string) (generated string) {
+		generated = terraform.Output(t, terraformOptions, outputName)
+		return
 	}
 
 	// website::tag::6:: At the end of the test, run `terraform destroy` to clean up any resources that were created
@@ -34,11 +33,11 @@ func TestTerraformAzureKeyVaultExample(t *testing.T) {
 	terraform.InitAndApply(t, terraformOptions)
 
 	// website::tag::3:: Run `terraform output` to get the values of output variables
-	resourceGroupName := terraform.Output(t, terraformOptions, "resource_group_name")
-	keyVaultName := terraform.Output(t, terraformOptions, "key_vault_name")
-	expectedSecretName := terraform.Output(t, terraformOptions, "secret_name")
-	expectedKeyName := terraform.Output(t, terraformOptions, "key_name")
-	expectedCertificateName := terraform.Output(t, terraformOptions, "certificate_name")
+	resourceGroupName := GenOutput("resource_group_name")
+	keyVaultName := GenOutput("key_vault_name")
+	expectedSecretName := GenOutput("secret_name")
+	expectedKeyName := GenOutput("key_name")
+	expectedCertificateName := GenOutput("certificate_name")
 
 	// website::tag::4:: Determine whether the keyvault exists
 	keyVault := azure.GetKeyVault(t, resourceGroupName, keyVaultName, "")
