@@ -12,13 +12,15 @@ module "key_vault_test" {
   resource_group_name = azurerm_resource_group.test.name
   #storage_account_ids_map          = module.StorageAccount.sa_ids_map
   name                            = var.keyvault_name
-  soft_delete_enabled             = var.soft_delete_enabled
+  #soft_delete_enabled             = var.soft_delete_enabled
   purge_protection_enabled        = var.purge_protection_enabled
   enabled_for_deployment          = var.enabled_for_deployment
   enabled_for_disk_encryption     = var.enabled_for_disk_encryption
   enabled_for_template_deployment = var.enabled_for_template_deployment
   sku_name                        = var.sku_name
-  access_policies                 = var.access_policies
+  subnet_name                     = var.subnet_name
+  virtual_network_name            = var.virtual_network_name
+  #access_policies                 = var.access_policies
   network_acls                    = var.network_acls
   #log_analytics_workspace_id       = var.log_analytics_workspace_id
   #diagnostics_storage_account_name = var.diagnostics_storage_account_name
