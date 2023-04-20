@@ -1,9 +1,11 @@
 variable "environment" {
   description = "Prod or Non-Prod or Dev etc"
+  default     = "Dev"
 }
 
 variable "workload" {
   description = "Name of the application or workload"
+  default     = "app"
 }
 
 variable "private_zone_id" {
@@ -13,15 +15,17 @@ variable "private_zone_id" {
 variable "resource_group_name" {}
 
 variable "virtual_network_name" {
-  type = string
+  type    = string
+  default = {}
 }
 
 variable "subnet_name" {
-  type = string
+  default = {}
+  type    = string
 }
 
 variable "tenant_id" {
-
+  default = {}
 }
 
 variable "network_acls" {
