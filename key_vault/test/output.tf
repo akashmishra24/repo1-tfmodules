@@ -3,7 +3,7 @@ output "resource_group_name" {
 }
 
 output "key_vault_name" {
-  value = module.key_vault_test.key_vault_name
+  value = module.key_vault_test.name
 }
   
 output "secret_name" {
