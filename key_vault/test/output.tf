@@ -1,5 +1,5 @@
-output "resource_group" {
-  value = module.key_vault_test.resource_group
+output "resource_group_name" {
+  value = module.key_vault_test.resource_group_name
 }
 
 output "key_vault_name" {
