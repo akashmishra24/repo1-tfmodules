@@ -10,7 +10,7 @@ resource "azurerm_resource_group" "test" {
 module "key_vault_test" {
   source                          = "../"
   resource_group_name             = azurerm_resource_group.test.name
-  key_vault_name                  = var.key_vault_name
+  name                            = var.name
   purge_protection_enabled        = var.purge_protection_enabled
   enabled_for_deployment          = var.enabled_for_deployment
   enabled_for_disk_encryption     = var.enabled_for_disk_encryption
