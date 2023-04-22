@@ -33,7 +33,7 @@ func TestTerraformStorageAcct(t *testing.T) {
 	terraform.InitAndApply(t, terraformOptions)
 
 	// website::tag::3:: Run `terraform output` to get the values of output variables
-	resourceGroupName := GenOutput("resource_group")
+	resourceGroupName := GenOutput("resource_group_name")
 	keyVaultName := GenOutput("key_vault_name")
 	secretName := GenOutput("secret_name")
 	keyName := GenOutput("key_name")
