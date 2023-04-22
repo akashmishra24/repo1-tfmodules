@@ -1,4 +1,4 @@
-key_vault_name                  = "kv-eastus-testing"
+name                            = "kv-eastus-testing"
 location                        = "eastus"
 resource_group_name             = "tf-strg-acct-testing"
 enabled_for_disk_encryption     = "false"
