@@ -28,6 +28,10 @@ jobs:
           terraform_wrapper: false
       - name: Install azure-cli
         uses: pietrobolcato/install-azure-cli-action@v1
+      - name: Azure Login
+        run: |
+          az login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
+          az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Download Go modules
         working-directory: key_vault/test
         run: go mod download
