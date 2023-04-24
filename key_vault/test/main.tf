@@ -15,6 +15,7 @@ resource "azurerm_key_vault_certificate" "certificate_name" {
 
 resource "azurerm_key_vault_secret" "this" {
   name         = var.secret_name
+  value        = var.value
   key_vault_id = module.key_vault_test.name["admin_kv"].id
 }
 
@@ -23,6 +24,14 @@ resource "azurerm_key_vault_key" "key_name" {
   key_vault_id = module.key_vault_test.name["admin_kv"].id
   key_type     = "RSA"
   key_size     = 2048
+  key_opts = [
+    "decrypt",
+    "encrypt",
+    "sign",
+    "unwrapKey",
+    "verify",
+    "wrapKey",
+  ]
 }
 
 module "key_vault_test" {
