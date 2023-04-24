@@ -4,6 +4,25 @@
 
 data "azurerm_client_config" "current" {}
 
+locals {
+  default_network_acls = {
+    bypass                     = "AzureServices"
+    default_action             = "Deny"
+    ip_rules                   = []
+    virtual_network_subnet_ids = []
+  }
+  disable_network_acls = {
+    bypass                     = "None"
+    default_action             = "Allow"
+    ip_rules                   = null
+    virtual_network_subnet_ids = null
+  }
+
+  merged_network_acls = var.network_acls != null ? merge(local.default_network_acls, var.network_acls) : null
+
+
+}
+
 data "azurerm_resource_group" "rg" {
   name = var.resource_group_name
 }
@@ -37,15 +56,14 @@ resource "azurerm_key_vault" "key-vault" {
   enable_rbac_authorization       = var.enable_rbac_authorization
   public_network_access_enabled   = var.public_network_access_enabled
 
+ 
   dynamic "network_acls" {
-    for_each = var.network_acls
-    iterator = acl
-
+    for_each = local.merged_network_acls == null ? [local.default_network_acls] : [local.merged_network_acls]
     content {
-      bypass                     = acl.value.bypass
-      default_action             = acl.value.default_action
-      ip_rules                   = acl.value.ip_rules
-      virtual_network_subnet_ids = acl.value.virtual_network_subnet_ids
+      bypass                     = network_acls.value.bypass
+      default_action             = network_acls.value.default_action
+      ip_rules                   = network_acls.value.ip_rules
+      virtual_network_subnet_ids = network_acls.value.virtual_network_subnet_ids
     }
   }
 }
