@@ -12,6 +12,10 @@ resource "azurerm_key_vault_certificate" "certificate_name" {
   
 }
 
+resource "azurerm_key_vault_secret" "this" {
+  name = var.secret_name
+}
+
 resource "azurerm_key_vault_key" "key_name" {
   name = var.key_name
 }
