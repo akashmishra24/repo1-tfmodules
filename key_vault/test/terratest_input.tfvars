@@ -20,7 +20,7 @@ network_acls = {
   ip_rules                   = ["100.5.0.9"]                                                                                                                                                                                                              # (Optional) One or more IP Addresses, or CIDR Blocks which should be able to access the Key Vault.
   virtual_network_subnet_ids = ["/subscriptions/9fa05bf3-35e9-4525-88d2-4ef3180944a6/resourceGroups/azngcpocnp-networking/providers/Microsoft.Network/virtualNetworks/azngcpocnp/subnets/azngcpocnp-private"] # (Optional) One or more Subnet ID's which should be able to access this Key Vault.   
 }
-}
+
 
 
 access_policies = {
