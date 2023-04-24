@@ -7,7 +7,7 @@ output "key_vault_name" {
 }
   
 output "secret_name" {
-  value = azurerm_key_vault_secret.secret_name.name
+  value = azurerm_key_vault_secret.this.name
 }
 
 output "key_name" {
