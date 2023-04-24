@@ -19,7 +19,7 @@ variable "virtual_network_name" {
 }
 
 variable "subnet_name" {
-  default = "azngcpocnp-private"
+  default = "azngcpocnp-public"
   type    = string
 }
 
