@@ -11,7 +11,6 @@ enable_rbac_authorization       = "false"
 public_network_access_enabled   = "false"
 key_name                        = "key"
 certificate_name                = "certificate"
-secret_name                     = "secret"
 tenant_id                       = "7c7fea3f-e205-448e-b10a-701c54916e39"
 network_acls = {
   bypass                     = "AzureServices"                                                                                                                                                                                                                        # (Required) Specifies which traffic can bypass the network rules. Possible values are AzureServices and None.
@@ -20,7 +19,12 @@ network_acls = {
   virtual_network_subnet_ids = ["/subscriptions/9fa05bf3-35e9-4525-88d2-4ef3180944a6/resourceGroups/azngcpocnp-networking/providers/Microsoft.Network/virtualNetworks/azngcpocnp/subnets/azngcpocnp-private"] # (Optional) One or more Subnet ID's which should be able to access this Key Vault.   
 }
 
-
+secrets = {
+  secret1 = {
+    name  = "key1"
+    value = "value1"
+  }
+}
 
 
 access_policies = {
