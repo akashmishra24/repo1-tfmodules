@@ -80,6 +80,58 @@ resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
   application_id          = lookup(each.value, "application_id", null)
 }
 
+resource "azurerm_key_vault_secret" "this" {
+  for_each     = var.secrets
+  name         = each.key
+  value        = each.value
+  key_vault_id = azurerm_key_vault.key-vault.id
+  depends_on   = [azurerm_key_vault_access_policy.key_vault_access_policy]
+}
+
+
+resource "azurerm_key_vault_key" "key_name" {
+  name         = var.key_name
+  key_vault_id = azurerm_key_vault.key-vault.id
+  key_type     = "RSA"
+  key_size     = 2048
+
+  key_opts = [
+    "decrypt",
+    "encrypt",
+    "sign",
+    "unwrapKey",
+    "verify",
+    "wrapKey",
+  ]
+}
+
+resource "azurerm_key_vault_certificate" "certificate_name" {
+  name         = var.certificate_name
+  key_vault_id = azurerm_key_vault.key-vault.id
+
+  certificate {
+    contents = filebase64("example.pfx")
+    password = "password"
+  }
+
+  certificate_policy {
+    issuer_parameters {
+      name = "Self"
+    }
+
+    key_properties {
+      exportable = true
+      key_size   = 2048
+      key_type   = "RSA"
+      reuse_key  = false
+    }
+
+    secret_properties {
+      content_type = "application/x-pkcs12"
+    }
+  }
+}
+
 resource "azurerm_private_endpoint" "kv-pvt-endpoint" {
   count               = var.public_network_access_enabled ? 0 : 1
   name                = "${azurerm_key_vault.key-vault.name}-endpoint"
