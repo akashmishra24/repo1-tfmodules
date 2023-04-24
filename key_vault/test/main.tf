@@ -2,14 +2,14 @@ locals {
   location = "eastus"
 }
 
-resource "azurerm_resource_group" "test" {
+resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
   location = local.location
 }
 
 module "key_vault_test" {
   source                          = "../"
-  resource_group_name             = azurerm_resource_group.test.name
+  resource_group_name             = azurerm_resource_group.rg.name
   name                            = var.name
   purge_protection_enabled        = var.purge_protection_enabled
   enabled_for_deployment          = var.enabled_for_deployment
