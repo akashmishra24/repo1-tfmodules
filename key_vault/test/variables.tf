@@ -139,8 +139,3 @@ variable "value" {
   default     = "value1"
 }
 
-variable "secrets" {
-  type        = map(string)
-  description = "A map of secrets for the Key Vault"
-  default     = {}
-}
