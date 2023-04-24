@@ -1,7 +1,7 @@
 
 
 output "resource_group_name" {
-   value = [for x in data.azurerm_resource_group.rg : x.resource_group_name]
+   value = data.azurerm_resource_group.rg.name
 }
 
 output "key_vault_name" {
