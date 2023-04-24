@@ -7,6 +7,15 @@ resource "azurerm_resource_group" "rg" {
   location = local.location
 }
 
+resource "azurerm_key_vault_certificate" "certificate_name" {
+  name = var.certificate_name
+  
+}
+
+resource "azurerm_key_vault_key" "key_name" {
+  name = var.key_name
+}
+
 module "key_vault_test" {
   source                          = "../"
   resource_group_name             = azurerm_resource_group.rg.name
