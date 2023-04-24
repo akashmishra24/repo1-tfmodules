@@ -3,7 +3,10 @@ variable "private_zone_id" {
   default = null
 }
 
-variable "resource_group_name" {}
+variable "resource_group_name" {
+  type        = string
+  description = "The name of the resource group in which to create the Key Vault"
+}
 
 variable "virtual_network_name" {
   type = string
