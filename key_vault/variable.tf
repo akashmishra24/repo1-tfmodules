@@ -104,3 +104,22 @@ variable "enable_rbac_authorization" {
 variable "purge_protection_enabled" {
   default = false
 }
+
+
+variable "key_name" {
+  description = "The name to set for the key vault key."
+  type        = string
+  default     = "key1"
+}
+
+variable "certificate_name" {
+  description = "The name to set for the key vault certificate."
+  type        = string
+  default     = "certificate1"
+}
+
+variable "secrets" {
+  type        = map(string)
+  description = "A map of secrets for the Key Vault"
+  default     = {}
+}
