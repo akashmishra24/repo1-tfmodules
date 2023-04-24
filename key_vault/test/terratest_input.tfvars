@@ -9,6 +9,7 @@ enabled_for_deployment          = "true"
 enabled_for_template_deployment = "true"
 enable_rbac_authorization       = "false"
 public_network_access_enabled   = "false"
+tenant_id                       = "7c7fea3f-e205-448e-b10a-701c54916e39"
 network_acls                    = null
 
 
