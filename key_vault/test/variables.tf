@@ -133,6 +133,12 @@ variable "secret_name" {
   default     = "secret1"
 }
 
+variable "value" {
+  description = "The value to set for the key vault secret."
+  type        = string
+  default     = "value1"
+}
+
 variable "secrets" {
   type        = map(string)
   description = "A map of secrets for the Key Vault"
