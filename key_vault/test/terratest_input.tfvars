@@ -11,6 +11,7 @@ enable_rbac_authorization       = "false"
 public_network_access_enabled   = "false"
 key_name                        = "key"
 certificate_name                = "certificate"
+secret_name                     = "secret"
 tenant_id                       = "7c7fea3f-e205-448e-b10a-701c54916e39"
 network_acls = {
   bypass                     = "AzureServices"                                                                                                                                                                                                                        # (Required) Specifies which traffic can bypass the network rules. Possible values are AzureServices and None.
