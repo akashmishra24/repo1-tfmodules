@@ -5,7 +5,7 @@ variable "private_zone_id" {
 }
 
 variable "name" {
-  type    = string
+  type = string
 }
 
 variable "resource_group_name" {
