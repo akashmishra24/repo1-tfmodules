@@ -9,19 +9,19 @@ resource "azurerm_resource_group" "rg" {
 
 resource "azurerm_key_vault_certificate" "certificate_name" {
   name         = var.certificate_name
-  key_vault_id = module.key_vault_test.name["admin_kv"].id
+  key_vault_id = module.key_vault_test.name.id
   
 }
 
 resource "azurerm_key_vault_secret" "this" {
   name         = var.secret_name
   value        = var.value
-  key_vault_id = module.key_vault_test.name["admin_kv"].id
+  key_vault_id = module.key_vault_test.name.id
 }
 
 resource "azurerm_key_vault_key" "key_name" {
   name         = var.key_name
-  key_vault_id = module.key_vault_test.name["admin_kv"].id
+  key_vault_id = module.key_vault_test.name.id
   key_type     = "RSA"
   key_size     = 2048
   key_opts = [
