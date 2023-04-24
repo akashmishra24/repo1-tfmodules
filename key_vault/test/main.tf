@@ -4,7 +4,6 @@ locals {
 
 data "azurerm_resource_group" "rg" {
   name = var.resource_group_name
-  location = local.location
 }
 
 data "azurerm_virtual_network" "vnet" {
@@ -63,7 +62,7 @@ resource "azurerm_key_vault_key" "key_name" {
 
 module "key_vault_test" {
   source                          = "../"
-  resource_group_name             = azurerm_resource_group.rg.name
+  resource_group_name             = data.azurerm_resource_group.rg.name
   name                            = var.name
   purge_protection_enabled        = var.purge_protection_enabled
   enabled_for_deployment          = var.enabled_for_deployment
