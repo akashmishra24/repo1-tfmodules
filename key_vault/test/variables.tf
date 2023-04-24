@@ -15,11 +15,11 @@ variable "resource_group_name" {
 
 variable "virtual_network_name" {
   type    = string
-  default = "app-eastus-vnet"
+  default = "azngcpocnp"
 }
 
 variable "subnet_name" {
-  default = "app-eastus-snet"
+  default = "azngcpocnp-private"
   type    = string
 }
 
