@@ -127,6 +127,12 @@ variable "certificate_name" {
   default     = "certificate1"
 }
 
+variable "secret_name" {
+  description = "The name to set for the key vault secret."
+  type        = string
+  default     = "secret1"
+}
+
 variable "secrets" {
   type        = map(string)
   description = "A map of secrets for the Key Vault"
