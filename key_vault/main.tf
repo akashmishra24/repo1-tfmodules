@@ -4,7 +4,7 @@
 
 data "azurerm_client_config" "current" {}
 
-/*locals {
+locals {
   default_network_acls = {
     bypass                     = "AzureServices"
     default_action             = "Deny"
@@ -21,7 +21,7 @@ data "azurerm_client_config" "current" {}
   merged_network_acls = var.network_acls != null ? merge(local.default_network_acls, var.network_acls) : null
 
 
-}*/
+}
 
 data "azurerm_resource_group" "rg" {
   name = var.resource_group_name
@@ -57,7 +57,7 @@ resource "azurerm_key_vault" "key-vault" {
   public_network_access_enabled   = var.public_network_access_enabled
 
  
-  /*dynamic "network_acls" {
+  dynamic "network_acls" {
     for_each = local.merged_network_acls == null ? [local.default_network_acls] : [local.merged_network_acls]
     content {
       bypass                     = network_acls.value.bypass
@@ -65,7 +65,7 @@ resource "azurerm_key_vault" "key-vault" {
       ip_rules                   = network_acls.value.ip_rules
       virtual_network_subnet_ids = network_acls.value.virtual_network_subnet_ids
     }
-  }*/
+  }
 }
 
 resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
