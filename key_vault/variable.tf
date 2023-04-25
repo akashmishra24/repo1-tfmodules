@@ -24,9 +24,9 @@ variable "tenant_id" {
 
 }
 
-variable "network_acls" {
+/*variable "network_acls" {
   default = {}
-}
+}*/
 
 variable "kv_access_policy" {
   default = {}
