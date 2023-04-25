@@ -27,7 +27,7 @@ variable "tenant_id" {
   default = {}
 }
 
-/*variable "network_acls" {
+variable "network_acls" {
   type = object({
     bypass                     = string       # (Required) Specifies which traffic can bypass the network rules. Possible values are AzureServices and None.
     default_action             = string       # (Required) The Default Action to use when no rules match from ip_rules / virtual_network_subnet_ids. Possible values are Allow and Deny.
@@ -36,7 +36,7 @@ variable "tenant_id" {
   })
   description = "Specifies values for Key Vault network access"
   default     = null
-}*/
+}
 
 variable "kv_access_policy" {
   default = {}
