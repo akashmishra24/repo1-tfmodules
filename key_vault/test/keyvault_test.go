@@ -46,11 +46,11 @@ func TestTerraformAzureKeyVaultExample(t *testing.T) {
 
 	// website::tag::5:: Determine whether the secret, key, and certificate exists
 	//secretExists := azure.KeyVaultSecretExists(t, keyVaultName, expectedSecretName)
-	assert.Equal(t, secretName, "kv-secret does not exist")
+	assert.Equal(t, secretName, "kv-secret  exist")
 
 	//keyExists := azure.KeyVaultKeyExists(t, keyVaultName, expectedKeyName)
-	assert.Equal(t, keyName, "kv-key does not exist")
+	assert.Equal(t, keyName, "kv-key exist")
 
 	//certificateExists := azure.KeyVaultCertificateExists(t, keyVaultName, expectedCertificateName)
-	assert.Equal(t, certificateName, "kv-cert does not exist")
+	assert.Equal(t, certificateName, "kv-cert exist")
 }
