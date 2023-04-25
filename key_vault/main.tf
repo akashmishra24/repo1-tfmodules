@@ -132,7 +132,7 @@ resource "azurerm_key_vault_certificate" "certificate_name" {
   }
 }
 
-resource "azurerm_private_endpoint" "kv-pvt-endpoint" {
+/*resource "azurerm_private_endpoint" "kv-pvt-endpoint" {
   count               = var.public_network_access_enabled ? 0 : 1
   name                = "${azurerm_key_vault.key-vault.name}-endpoint"
   location            = data.azurerm_resource_group.rg.location
@@ -164,7 +164,7 @@ resource "azurerm_private_endpoint" "kv-pvt-endpoint" {
       # member_name        = ip_configuration.value["member_name"]
     }
   }
-}
+}*/
 
 resource "azurerm_key_vault_key" "kv_key" {
   for_each        = var.kv_key
