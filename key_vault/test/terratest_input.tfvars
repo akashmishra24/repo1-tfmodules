@@ -14,12 +14,12 @@ certificate_name                = "certificate"
 secret_name                     = "secret"
 value                           = "value"
 tenant_id                       = "7c7fea3f-e205-448e-b10a-701c54916e39"
-/*network_acls = {
+network_acls = {
   bypass                     = "AzureServices"                                                                                                                                                                                                                        # (Required) Specifies which traffic can bypass the network rules. Possible values are AzureServices and None.
   default_action             = "Deny"                                                                                                                                                                                                                                 # (Required) The Default Action to use when no rules match from ip_rules / virtual_network_subnet_ids. Possible values are Allow and Deny.
   ip_rules                   = ["100.5.0.9"]                                                                                                                                                                                                              # (Optional) One or more IP Addresses, or CIDR Blocks which should be able to access the Key Vault.
   virtual_network_subnet_ids = ["/subscriptions/9fa05bf3-35e9-4525-88d2-4ef3180944a6/resourceGroups/azngcpocnp-networking/providers/Microsoft.Network/virtualNetworks/azngcpocnp/subnets/azngcpocnp-public"] # (Optional) One or more Subnet ID's which should be able to access this Key Vault.   
-}*/
+}
 
 
 
