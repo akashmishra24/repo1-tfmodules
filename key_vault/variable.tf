@@ -48,9 +48,6 @@ variable "enabled_for_template_deployment" {
   default = true
 }
 
-variable "public_network_access_enabled" {
-  default = false
-}
 
 variable "soft_delete_retention_days" {
   default = 7
@@ -97,9 +94,7 @@ variable "kv_key" {
   # key_opts - Possible values include: [decrypt, encrypt, sign, unwrapKey, verify and wrapKey].
 }
 
-variable "enable_rbac_authorization" {
-  default = false
-}
+
 
 variable "purge_protection_enabled" {
   default = false
