@@ -77,7 +77,7 @@ variable "soft_delete_retention_days" {
 #   default = null
 # }
 
-variable "private_connection_resource_alias" {
+/*variable "private_connection_resource_alias" {
   default = null
 }
 
@@ -87,7 +87,7 @@ variable "private_dns_zone_group" {
 
 variable "ip_configuration" {
   default = {}
-}
+}*/
 
 variable "kv_key" {
   default = {}
