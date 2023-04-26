@@ -10,10 +10,7 @@ output "key_vault_name" {
   value = azurerm_key_vault.key-vault.name
 }
 
-output "key_vault_id" {
-  description = "Key Vault ID"
-  value       = azurerm_key_vault.key-vault.key_vault_id
-}
+
 
 output "secret_name" {
   value = azurerm_key_vault_secret.this.name
