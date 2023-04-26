@@ -48,6 +48,44 @@ resource "azurerm_key_vault" "key-vault" {
       virtual_network_subnet_ids = acl.value.virtual_network_subnet_ids
     }
   }
+  
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
+
+    key_permissions = [
+      "create",
+      "get",
+      "list",
+      "delete",
+      "purge",
+    ]
+
+    secret_permissions = [
+      "set",
+      "get",
+      "list",
+      "delete",
+      "purge",
+    ]
+
+    certificate_permissions = [
+      "create",
+      "delete",
+      "deleteissuers",
+      "get",
+      "getissuers",
+      "import",
+      "list",
+      "listissuers",
+      "managecontacts",
+      "manageissuers",
+      "setissuers",
+      "update",
+      "purge",
+    ]
+  }
+}
 }
 
 resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
