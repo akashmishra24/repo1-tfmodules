@@ -12,7 +12,7 @@ output "key_vault_name" {
 
 output "key_vault_id" {
   description = "Key Vault ID"
-  value       = module.key_vault_test.key_vault_id
+  value       = azurerm_key_vault.key-vault.key_vault_id
 }
 
 output "secret_name" {
