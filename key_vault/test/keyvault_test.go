@@ -42,7 +42,7 @@ func TestTerraformAzureKeyVaultExample(t *testing.T) {
 	// website::tag::4:: Determine whether the keyvault exists
 	// keyVault := azure.GetKeyVault(t, resourceGroupName, keyVaultName, "")
 	//assert.Equal(t, "[azngcpocnp-networking]", resourceGroupName)
-	assert.Equal(t, "[kv-test-eastus-non-prod]", keyVaultName)
+	assert.Equal(t, "kv-test-eastus-non-prod", keyVaultName)
 
 	// website::tag::5:: Determine whether the secret, key, and certificate exists
 	//secretExists := azure.KeyVaultSecretExists(t, keyVaultName, expectedSecretName)
