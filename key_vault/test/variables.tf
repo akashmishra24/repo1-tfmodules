@@ -1,45 +1,31 @@
+variable "environment" {
+  description = "Prod or Non-Prod or Dev etc"
+}
 
+variable "workload" {
+  description = "Name of the application or workload"
+}
 
 variable "private_zone_id" {
   default = null
 }
 
-variable "name" {
+variable "resource_group_name" {}
+
+variable "virtual_network_name" {
   type = string
 }
 
-variable "resource_group_name" {
-  type        = string
-  description = "The name of the resource group in which to create the Key Vault"
-}
-
-variable "virtual_network_name" {
-  type    = string
-  default = "azngcpocnp"
-}
-
 variable "subnet_name" {
-  default = "azngcpocnp-public"
-  type    = string
+  type = string
 }
 
 variable "tenant_id" {
-  default = {}
-}
 
-variable "public_network_access_enabled" {
-  default = false
 }
 
 variable "network_acls" {
-  type = object({
-    bypass                     = string       # (Required) Specifies which traffic can bypass the network rules. Possible values are AzureServices and None.
-    default_action             = string       # (Required) The Default Action to use when no rules match from ip_rules / virtual_network_subnet_ids. Possible values are Allow and Deny.
-    ip_rules                   = list(string) # (Optional) One or more IP Addresses, or CIDR Blocks which should be able to access the Key Vault.
-    virtual_network_subnet_ids = list(string) # (Optional) One or more Subnet ID's which should be able to access this Key Vault.
-  })
-  description = "Specifies values for Key Vault network access"
-  default     = null
+  default = {}
 }
 
 variable "kv_access_policy" {
@@ -62,7 +48,9 @@ variable "enabled_for_template_deployment" {
   default = true
 }
 
-
+variable "public_network_access_enabled" {
+  default = false
+}
 
 variable "soft_delete_retention_days" {
   default = 7
@@ -109,33 +97,10 @@ variable "kv_key" {
   # key_opts - Possible values include: [decrypt, encrypt, sign, unwrapKey, verify and wrapKey].
 }
 
-
+variable "enable_rbac_authorization" {
+  default = false
+}
 
 variable "purge_protection_enabled" {
   default = false
 }
-
-variable "key_name" {
-  description = "The name to set for the key vault key."
-  type        = string
-  default     = "key1"
-}
-
-variable "certificate_name" {
-  description = "The name to set for the key vault certificate."
-  type        = string
-  default     = "certificate1"
-}
-
-variable "secret_name" {
-  description = "The name to set for the key vault secret."
-  type        = string
-  default     = "secret1"
-}
-
-variable "value" {
-  description = "The value to set for the key vault secret."
-  type        = string
-  default     = "value1"
-}
-
