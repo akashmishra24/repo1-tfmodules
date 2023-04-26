@@ -24,7 +24,7 @@ data "azurerm_subnet" "snet" {
 #---------------------------------------------------------------
 
 resource "azurerm_key_vault" "key-vault" {
-  name                            = "kv-${var.workload}-${data.azurerm_resource_group.rg.location}-${var.environment}"
+  name                            = "kv1-${var.workload}-${data.azurerm_resource_group.rg.location}-${var.environment}"
   location                        = data.azurerm_resource_group.rg.location
   resource_group_name             = data.azurerm_resource_group.rg.name
   enabled_for_disk_encryption     = var.enabled_for_disk_encryption
