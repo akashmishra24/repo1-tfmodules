@@ -32,6 +32,10 @@ variable "kv_access_policy" {
   default = {}
 }
 
+variable "public_network_access_enabled" {
+  default = false
+}
+
 variable "sku_name" {
   default = "standard"
 }
