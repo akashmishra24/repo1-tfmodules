@@ -58,7 +58,6 @@ resource "azurerm_key_vault" "key-vault" {
       "get",
       "list",
       "delete",
-      "purge",
     ]
 
     secret_permissions = [
@@ -66,23 +65,15 @@ resource "azurerm_key_vault" "key-vault" {
       "get",
       "list",
       "delete",
-      "purge",
     ]
 
     certificate_permissions = [
       "create",
       "delete",
-      "deleteissuers",
       "get",
-      "getissuers",
       "import",
       "list",
-      "listissuers",
-      "managecontacts",
-      "manageissuers",
-      "setissuers",
       "update",
-      "purge",
     ]
   }
 }
