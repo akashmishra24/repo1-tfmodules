@@ -112,7 +112,7 @@ resource "azurerm_key_vault_key" "kv_key" {
 resource "azurerm_key_vault_secret" "this"  {
   name         = "${var.secret_name}-${var.postfix}"
   value        = "mysecret"
-  key_vault_id = azurerm_key_vault.key_vault.id
+  key_vault_id = azurerm_key_vault.key-vault.id
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -121,7 +121,7 @@ resource "azurerm_key_vault_secret" "this"  {
 
 resource "azurerm_key_vault_key" "key_name"{
   name         = "${var.key_name}-${var.postfix}"
-  key_vault_id = azurerm_key_vault.key_vault.id
+  key_vault_id = azurerm_key_vault.key-vault.id
   key_type     = "RSA"
   key_size     = 2048
 
@@ -142,7 +142,7 @@ resource "azurerm_key_vault_key" "key_name"{
 # ---------------------------------------------------------------------------------------------------------------------
 resource "azurerm_key_vault_certificate" "certificate_name" {
   name         = "${var.certificate_name}-${var.postfix}"
-  key_vault_id = azurerm_key_vault.key_vault.id
+  key_vault_id = azurerm_key_vault.key-vault.id
 
   certificate {
     contents = filebase64("example.pfx")
