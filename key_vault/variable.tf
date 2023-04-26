@@ -1,22 +1,22 @@
+variable "environment" {
+  description = "Prod or Non-Prod or Dev etc"
+}
+
+variable "workload" {
+  description = "Name of the application or workload"
+}
 
 variable "private_zone_id" {
   default = null
 }
 
-variable "resource_group_name" {
-  type        = string
-  description = "The name of the resource group in which to create the Key Vault"
-}
+variable "resource_group_name" {}
 
 variable "virtual_network_name" {
   type = string
 }
 
 variable "subnet_name" {
-  type = string
-}
-
-variable "name" {
   type = string
 }
 
@@ -30,10 +30,6 @@ variable "network_acls" {
 
 variable "kv_access_policy" {
   default = {}
-}
-
-variable "public_network_access_enabled" {
-  default = false
 }
 
 variable "sku_name" {
@@ -52,6 +48,9 @@ variable "enabled_for_template_deployment" {
   default = true
 }
 
+variable "public_network_access_enabled" {
+  default = false
+}
 
 variable "soft_delete_retention_days" {
   default = 7
@@ -78,7 +77,7 @@ variable "soft_delete_retention_days" {
 #   default = null
 # }
 
-/*variable "private_connection_resource_alias" {
+variable "private_connection_resource_alias" {
   default = null
 }
 
@@ -88,7 +87,7 @@ variable "private_dns_zone_group" {
 
 variable "ip_configuration" {
   default = {}
-}*/
+}
 
 variable "kv_key" {
   default = {}
@@ -98,27 +97,10 @@ variable "kv_key" {
   # key_opts - Possible values include: [decrypt, encrypt, sign, unwrapKey, verify and wrapKey].
 }
 
-
-
-variable "purge_protection_enabled" {
+variable "enable_rbac_authorization" {
   default = false
 }
 
-
-variable "key_name" {
-  description = "The name to set for the key vault key."
-  type        = string
-  default     = "key1"
-}
-
-variable "certificate_name" {
-  description = "The name to set for the key vault certificate."
-  type        = string
-  default     = "certificate1"
-}
-
-variable "secrets" {
-  type        = map(string)
-  description = "A map of secrets for the Key Vault"
-  default     = {}
+variable "purge_protection_enabled" {
+  default = false
 }
