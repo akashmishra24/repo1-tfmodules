@@ -10,6 +10,30 @@ variable "private_zone_id" {
   default = null
 }
 
+variable "secret_name" {
+  description = "The name to set for the key vault secret."
+  type        = string
+  default     = "secret1"
+}
+
+variable "key_name" {
+  description = "The name to set for the key vault key."
+  type        = string
+  default     = "key1"
+}
+
+variable "certificate_name" {
+  description = "The name to set for the key vault certificate."
+  type        = string
+  default     = "certificate1"
+}
+
+variable "postfix" {
+  description = "A postfix string to centrally mitigate resource name collisions"
+  type        = string
+  default     = "resource"
+}
+
 variable "resource_group_name" {}
 
 variable "virtual_network_name" {
