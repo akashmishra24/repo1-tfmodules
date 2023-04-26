@@ -75,7 +75,7 @@ resource "azurerm_key_vault" "key-vault" {
   }
 }
 
-resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
+/*resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
   for_each                = var.enable_rbac_authorization ? {} : var.kv_access_policy
   key_vault_id            = azurerm_key_vault.key-vault.id
   tenant_id               = data.azurerm_client_config.current.tenant_id
@@ -85,7 +85,7 @@ resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
   storage_permissions     = lookup(each.value, "storage_permissions", null)
   certificate_permissions = lookup(each.value, "certificate_permissions", null)
   application_id          = lookup(each.value, "application_id", null)
-}
+}*/
 
 resource "azurerm_private_endpoint" "kv-pvt-endpoint" {
   count               = var.public_network_access_enabled ? 0 : 1
