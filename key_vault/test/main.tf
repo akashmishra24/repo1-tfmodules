@@ -86,7 +86,6 @@ resource "azurerm_key_vault" "key-vault" {
     ]
   }
 }
-}
 
 resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
   for_each                = var.enable_rbac_authorization ? {} : var.kv_access_policy
