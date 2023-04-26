@@ -107,3 +107,62 @@ resource "azurerm_key_vault_key" "kv_key" {
   expiration_date = lookup(each.value, "expiration_date", null)
   key_opts        = each.value["key_opts"]
 }
+
+
+resource "azurerm_key_vault_secret" "key_vault_secret" {
+  name         = "${var.secret_name}-${var.postfix}"
+  value        = "mysecret"
+  key_vault_id = azurerm_key_vault.key-vault.id
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
+#  DEPLOY A KEY TO THE KEY VAULT
+# ---------------------------------------------------------------------------------------------------------------------
+
+resource "azurerm_key_vault_key" "key_vault_key" {
+  name         = "${var.key_name}-${var.postfix}"
+  key_vault_id = azurerm_key_vault.key-vault.id
+  key_type     = "RSA"
+  key_size     = 2048
+
+  key_opts = [
+    "decrypt",
+    "encrypt",
+    "sign",
+    "unwrapKey",
+    "verify",
+    "wrapKey",
+  ]
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
+#  DEPLOY A CERTIFICATE TO THE KEY VAULT
+#  The example uses a sample pfx file with plain text password to make it easier to test. However, in production modules 
+#  should use a more secure mechanisms for transferring these files.
+# ---------------------------------------------------------------------------------------------------------------------
+resource "azurerm_key_vault_certificate" "key_vault_certificate" {
+  name         = "${var.certificate_name}-${var.postfix}"
+  key_vault_id = azurerm_key_vault.key-vault.id
+
+  certificate {
+    contents = filebase64("example.pfx")
+    password = "password"
+  }
+
+  certificate_policy {
+    issuer_parameters {
+      name = "Self"
+    }
+
+    key_properties {
+      exportable = true
+      key_size   = 2048
+      key_type   = "RSA"
+      reuse_key  = false
+    }
+
+    secret_properties {
+      content_type = "application/x-pkcs12"
+    }
+  }
+}
