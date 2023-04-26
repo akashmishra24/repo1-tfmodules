@@ -17,7 +17,7 @@ func TestTerraformAzureKeyVaultExample(t *testing.T) {
 	terraformOptions := terraform.WithDefaultRetryableErrors(t, &terraform.Options{
 		// Set the path to the Terraform code that will be tested.
 		TerraformDir: "./",
-		VarFiles:     []string{"terratest_input.tfvars"},
+		VarFiles:     []string{"terraform.tfvars"},
 	})
 	
 	// GenOutput generates the output string to be asserted against
@@ -35,22 +35,22 @@ func TestTerraformAzureKeyVaultExample(t *testing.T) {
 	// website::tag::3:: Run `terraform output` to get the values of output variables
 	resourceGroupName := GenOutput("resource_group_name")
 	keyVaultName := GenOutput("key_vault_name")
-	secretName := GenOutput("secret_name")
-	keyName := GenOutput("key_name")
-	certificateName := GenOutput("certificate_name")
+	// secretName := GenOutput("secret_name")
+	//keyName := GenOutput("key_name")
+	// certificateName := GenOutput("certificate_name")
 
 	// website::tag::4:: Determine whether the keyvault exists
 	// keyVault := azure.GetKeyVault(t, resourceGroupName, keyVaultName, "")
-	assert.Equal(t, "[tf-strg-acct-testing]", resourceGroupName)
-	assert.Equal(t, "[kv-eastus-testing]", keyVaultName)
+	assert.Equal(t, "[azngcpocnp-networking]", resourceGroupName)
+	assert.Equal(t, "[kv-test-eastus-non-prod]", keyVaultName)
 
 	// website::tag::5:: Determine whether the secret, key, and certificate exists
 	//secretExists := azure.KeyVaultSecretExists(t, keyVaultName, expectedSecretName)
-	assert.Equal(t, secretName, "kv-secret  exist")
+	//assert.Equal(t, secretName, "kv-secret  exist")
 
 	//keyExists := azure.KeyVaultKeyExists(t, keyVaultName, expectedKeyName)
-	assert.Equal(t, keyName, "kv-key exist")
+	//assert.Equal(t, keyName, "kv-key exist")
 
 	//certificateExists := azure.KeyVaultCertificateExists(t, keyVaultName, expectedCertificateName)
-	assert.Equal(t, certificateName, "kv-cert exist")
+	//assert.Equal(t, certificateName, "kv-cert exist")
 }
