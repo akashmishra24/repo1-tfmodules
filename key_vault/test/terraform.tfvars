@@ -11,3 +11,7 @@ kv_access_policy = {
     }
 }
 public_network_access_enabled = true
+key_name                      = "key"
+certificate_name              = "certificate"
+secret_name                   = "secret"
+value                         = "value"
