@@ -30,7 +30,7 @@ variable "location" {
 variable "resource_group_name" {
   type = string
 }
-
+# test
 variable "aks_name" {
   type = string
 }
