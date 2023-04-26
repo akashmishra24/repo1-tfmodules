@@ -11,7 +11,7 @@ defaults:
 jobs:
   build:
     name: Create Release  
-    if: github.event.pull_request.merged == true
+    if: github.event.push == true
     runs-on: ubuntu-latest
     steps:
       - name: Taking the Latest Release Tag number
@@ -29,7 +29,7 @@ jobs:
         
       - name: Bumping Major Index
         id: bump_version_major
-        if: contains(github.event.pull_request.title, 'major')
+        if: contains(github.event.push.title, 'major')
         uses: christian-draeger/increment-semantic-version@1.0.2
         with:
           current-version: ${{ steps.releaseVersion.outputs.Release_tag }}
