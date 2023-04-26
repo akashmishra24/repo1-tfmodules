@@ -27,6 +27,10 @@ variable "tenant_id" {
   default = {}
 }
 
+variable "public_network_access_enabled" {
+  default = false
+}
+
 variable "network_acls" {
   type = object({
     bypass                     = string       # (Required) Specifies which traffic can bypass the network rules. Possible values are AzureServices and None.
