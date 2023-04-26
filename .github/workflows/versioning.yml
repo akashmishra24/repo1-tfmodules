@@ -27,8 +27,8 @@ jobs:
       working-directory: ./.github/workflows
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GIT_AUTHOR_NAME: enter author name
-        GIT_AUTHOR_EMAIL: person@example.com
-        GIT_COMMITTER_NAME: enter name
-        GIT_COMMITTER_EMAIL: committer@example.com
+        GIT_AUTHOR_NAME: Akash Mishra
+        GIT_AUTHOR_EMAIL: akash.everblue.mishra@gmail.com
+        GIT_COMMITTER_NAME: Akash
+        GIT_COMMITTER_EMAIL: akash.everblue.mishra@gmail.com
       run: npx semantic-release
