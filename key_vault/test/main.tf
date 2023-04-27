@@ -78,19 +78,21 @@ data "azurerm_subnet" "snet" {
 }*/
 
 module "key_vault_test" {
-  source                          = "../"
-  resource_group_name             = data.azurerm_resource_group.rg.name
-  name                            = var.name
-  purge_protection_enabled        = var.purge_protection_enabled
-  enabled_for_deployment          = var.enabled_for_deployment
-  enabled_for_disk_encryption     = var.enabled_for_disk_encryption
-  enabled_for_template_deployment = var.enabled_for_template_deployment
-  sku_name                        = var.sku_name
-  subnet_name                     = var.subnet_name
-  virtual_network_name            = var.virtual_network_name
-  tenant_id                       = var.tenant_id
-  public_network_access_enabled   = var.public_network_access_enabled
-  network_acls                    = var.network_acls
+  source                        = "../"
+  resource_group_name           = data.azurerm_resource_group.rg.name
+  workload                      = var.workload
+  environment                   = var.environment
+  tenant_id                     = var.tenant_id
+  subnet_name                   = var.subnet_name
+  virtual_network_name          = var.virtual_network_name
+  tenant_id                     = var.tenant_id
+  public_network_access_enabled = var.public_network_access_enabled
+  #network_acls                  = var.network_acls
+  key_name                      = var.key_name  
+  certificate_name              = var.certificate_name
+  secret_name                   = var.secret_name
+  value                         = var.value
+  kv_access_policy              = var.kv_access_policy
 }
   
 
