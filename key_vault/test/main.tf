@@ -85,7 +85,6 @@ module "key_vault_test" {
   tenant_id                     = var.tenant_id
   subnet_name                   = var.subnet_name
   virtual_network_name          = var.virtual_network_name
-  tenant_id                     = var.tenant_id
   public_network_access_enabled = var.public_network_access_enabled
   #network_acls                  = var.network_acls
   key_name                      = var.key_name  
