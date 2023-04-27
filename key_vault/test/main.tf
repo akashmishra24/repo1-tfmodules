@@ -90,7 +90,6 @@ module "key_vault_test" {
   key_name                      = var.key_name  
   certificate_name              = var.certificate_name
   secret_name                   = var.secret_name
-  value                         = var.value
   kv_access_policy              = var.kv_access_policy
 }
   
