@@ -23,7 +23,7 @@ data "azurerm_subnet" "snet" {
 # Resource creation: Key Vault
 #---------------------------------------------------------------
 
-resource "azurerm_key_vault" "key-vault" {
+/*resource "azurerm_key_vault" "key-vault" {
   name                            = "kv1-${var.workload}-${data.azurerm_resource_group.rg.location}-${var.environment}"
   location                        = data.azurerm_resource_group.rg.location
   resource_group_name             = data.azurerm_resource_group.rg.name
@@ -75,7 +75,25 @@ resource "azurerm_key_vault" "key-vault" {
       "List",
     ]
   }
+}*/
+
+module "key_vault_test" {
+  source                          = "../"
+  resource_group_name             = data.azurerm_resource_group.rg.name
+  name                            = var.name
+  purge_protection_enabled        = var.purge_protection_enabled
+  enabled_for_deployment          = var.enabled_for_deployment
+  enabled_for_disk_encryption     = var.enabled_for_disk_encryption
+  enabled_for_template_deployment = var.enabled_for_template_deployment
+  sku_name                        = var.sku_name
+  subnet_name                     = var.subnet_name
+  virtual_network_name            = var.virtual_network_name
+  tenant_id                       = var.tenant_id
+  public_network_access_enabled   = var.public_network_access_enabled
+  network_acls                    = var.network_acls
 }
+  
+
 
 /*resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
   for_each                = var.enable_rbac_authorization ? {} : var.kv_access_policy
