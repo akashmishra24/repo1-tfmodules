@@ -64,7 +64,7 @@ resource "azurerm_key_vault" "key-vault" {
     secret_permissions = [
       "Set",
       "Delete",
-      "Craete"
+      "Create",
       "Get",
       "List",
       
