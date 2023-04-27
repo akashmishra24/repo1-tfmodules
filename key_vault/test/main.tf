@@ -23,7 +23,7 @@ data "azurerm_subnet" "snet" {
 # Resource creation: Key Vault
 #---------------------------------------------------------------
 
-/*resource "azurerm_key_vault" "key-vault" {
+resource "azurerm_key_vault" "key-vault" {
   name                            = "kv1-${var.workload}-${data.azurerm_resource_group.rg.location}-${var.environment}"
   location                        = data.azurerm_resource_group.rg.location
   resource_group_name             = data.azurerm_resource_group.rg.name
@@ -75,9 +75,9 @@ data "azurerm_subnet" "snet" {
       "List",
     ]
   }
-}*/
+}
 
-module "key_vault_test" {
+/*module "key_vault_test" {
   source                        = "../"
   resource_group_name           = data.azurerm_resource_group.rg.name
   workload                      = var.workload
@@ -91,11 +91,11 @@ module "key_vault_test" {
   certificate_name              = var.certificate_name
   secret_name                   = var.secret_name
   kv_access_policy              = var.kv_access_policy
-}
+}*/
   
 
 
-/*resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
+resource "azurerm_key_vault_access_policy" "key_vault_access_policy" {
   for_each                = var.enable_rbac_authorization ? {} : var.kv_access_policy
   key_vault_id            = azurerm_key_vault.key-vault.id
   tenant_id               = data.azurerm_client_config.current.tenant_id
@@ -105,7 +105,7 @@ module "key_vault_test" {
   storage_permissions     = lookup(each.value, "storage_permissions", null)
   certificate_permissions = lookup(each.value, "certificate_permissions", null)
   application_id          = lookup(each.value, "application_id", null)
-}*/
+}
 
 resource "azurerm_private_endpoint" "kv-pvt-endpoint" {
   count               = var.public_network_access_enabled ? 0 : 1
