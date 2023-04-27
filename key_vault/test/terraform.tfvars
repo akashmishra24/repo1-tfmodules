@@ -7,7 +7,7 @@ tenant_id = "7c7fea3f-e205-448e-b10a-701c54916e39"
 kv_access_policy = {
     policy1 = {
         key_permissions         = ["Get", "Create", "List", "Delete"]
-        secret_permissions      = ["Get", "Set", "List", "Delete", "Create"]
+        secret_permissions      = ["Get", "Set", "List", "Delete","Restore", "Recover"]
         certificate_permissions = ["Get", "Create", "List", "Restore", "Recover", "Delete"]
     }
 }
