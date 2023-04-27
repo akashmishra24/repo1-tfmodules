@@ -211,7 +211,7 @@ resource "azurerm_key_vault_certificate" "certificate_name" {
     }
 
     secret_properties {
-      content_type = "application/PKCS#12"
+      content_type = "application/pkcs12"
     }
   }
 }
