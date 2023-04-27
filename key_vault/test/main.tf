@@ -58,6 +58,10 @@ resource "azurerm_key_vault" "key-vault" {
       "Delete",
       "Get",
       "List",
+      "Recover",
+      "Backup",
+      "Restore",
+      "Import",
       
     ]
 
@@ -68,6 +72,7 @@ resource "azurerm_key_vault" "key-vault" {
       "List",
       "Recover",
       "Restore",
+      
       
     ]
 
