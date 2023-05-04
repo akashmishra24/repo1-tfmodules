@@ -7,8 +7,6 @@
 package test
 
 import (
-	"strconv"
-	"strings"
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/terraform"
