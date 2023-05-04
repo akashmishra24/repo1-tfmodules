@@ -1,5 +1,5 @@
 output "resource_group_name" {
-  value = azurerm_resource_group.this.name
+  value = data.azurerm_resource_group.this.name
 }
 
 output "recovery_service_vault_name" {

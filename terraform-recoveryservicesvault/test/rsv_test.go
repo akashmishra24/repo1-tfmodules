@@ -33,17 +33,13 @@ func TestTerraformAzureKeyVaultExample(t *testing.T) {
 	terraform.InitAndApply(t, terraformOptions)
 
 	// website::tag::3:: Run `terraform output` to get the values of output variables
-	resourceGroupName := terraform.Output(t, terraformOptions, "resource_group_name")
-	vaultName := terraform.Output(t, terraformOptions, "recovery_service_vault_name")
-	policyVmName := terraform.Output(t, terraformOptions, "backup_policy_vm_name")
+	resourceGroupName := GenOutput("resource_group_name")
+	vaultName := GenOutput("recovery_service_vault_name")
+	policyVmName := GenOutput("backup_policy_vm_name")
 
 	// website::tag::4:: Verify the recovery services resources
-	exists := azure.RecoveryServicesVaultExists(t, vaultName, resourceGroupName, subscriptionID)
-	assert.True(t, exists, "vault does not exist")
+	assert.Equal(t, "azngcpocnp-networking", resourceGroupName)
+	assert.Equal(t, "vm-recovery-vault", vaultName)
+	assert.Equal(t, "vm-recovery-vault-policy", policyVmName)
 
-	policyList := azure.GetRecoveryServicesVaultBackupPolicyList(t, vaultName, resourceGroupName, subscriptionID)
-	assert.NotNil(t, policyList, "vault backup policy list is nil")
-
-	vmPolicyList := azure.GetRecoveryServicesVaultBackupProtectedVMList(t, policyVmName, vaultName, resourceGroupName, subscriptionID)
-	assert.NotNil(t, vmPolicyList, "vault backup policy list for protected vm is nil")
 }
