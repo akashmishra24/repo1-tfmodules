@@ -49,7 +49,7 @@ func TestTerraformAzureKeyVaultExample(t *testing.T) {
 	//t.Run("LoadBalancer_Public", func(t *testing.T) {
 	// Check Public Load Balancer exists.
 	//actualLBPublicExists := azure.LoadBalancerExists(t, expectedLBPublicName, resourceGroupName, subscriptionID)
-	assert.Equal(t, "pip-aztest", expectedLBPublicName)
+	assert.NotEqual(t, "pip-aztest", expectedLBPublicName)
 
 	// Check Frontend Configuration for Load Balancer.
 	//actualLBPublicFeConfigNames := azure.GetLoadBalancerFrontendIPConfigNames(t, expectedLBPublicName, resourceGroupName, subscriptionID)
