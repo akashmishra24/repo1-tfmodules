@@ -19,7 +19,7 @@ output "lb_private_ip_dynamic" {
 }
 
 output "lb_public_name" {
-  value = azurerm_lb.public.name
+  value = azurerm_public_ip.azlb.name
 }
 
 output "lb_public_fe_config_name" {
@@ -31,5 +31,5 @@ output "public_address_name" {
 }
 
 output "resource_group_name" {
-  value = azurerm_resource_group.azlb.name
+  value = data.azurerm_resource_group.azlb.name
 }

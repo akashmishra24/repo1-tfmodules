@@ -12,6 +12,7 @@ data "azurerm_subnet" "snet" {
 
 locals {
   data_subnet_id = try(data.azurerm_subnet.snet[0].id, "")
+  pip_name       = "testpip"
 }
 
 resource "azurerm_public_ip" "azlb" {
