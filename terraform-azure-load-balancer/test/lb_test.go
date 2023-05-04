@@ -33,6 +33,7 @@ func TestTerraformAzureKeyVaultExample(t *testing.T) {
 	terraform.InitAndApply(t, terraformOptions)
 
 	// Run `terraform output` to get the values of output variables
+	#keyVaultName := GenOutput("key_vault_name")
 	resourceGroupName := terraform.Output(t, terraformOptions, "resource_group_name")
 	expectedLBPublicName := terraform.Output(t, terraformOptions, "lb_public_name")
 	expectedLBPrivateName := terraform.Output(t, terraformOptions, "lb_private_name")
@@ -41,6 +42,7 @@ func TestTerraformAzureKeyVaultExample(t *testing.T) {
 	expectedLBPrivateFeConfigName := terraform.Output(t, terraformOptions, "lb_private_fe_config_static_name")
 	expectedLBPrivateIP := terraform.Output(t, terraformOptions, "lb_private_ip_static")
 
+	#assert.Equal(t, "kv-test-eastus-non-prod", keyVaultName)
 	actualLBDoesNotExist := azure.LoadBalancerExists(t, "negative-test", resourceGroupName, subscriptionID)
 	assert.False(t, actualLBDoesNotExist)
 

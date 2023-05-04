@@ -34,8 +34,8 @@ func TestTerraformAzureKeyVaultExample(t *testing.T) {
 
 	resourceGroupName := terraform.Output(t, terraformOptions, "resource_group_name")
 	nsgName := terraform.Output(t, terraformOptions, "nsg_name")
-	sshRuleName := terraform.Output(t, terraformOptions, "ssh_rule_name")
-	httpRuleName := terraform.Output(t, terraformOptions, "http_rule_name")
+	#sshRuleName := terraform.Output(t, terraformOptions, "ssh_rule_name")
+	#httpRuleName := terraform.Output(t, terraformOptions, "http_rule_name")
 
 	// A default NSG has 6 rules, and we have two custom rules for a total of 8
 	rules, err := azure.GetAllNSGRulesE(resourceGroupName, nsgName, "")
