@@ -74,5 +74,5 @@ func TestTerraformAzureKeyVaultExample(t *testing.T) {
 		// Check for No Frontend Configuration for Load Balancer.
 		//actualLBNoFEConfigFeConfigNames := azure.GetLoadBalancerFrontendIPConfigNames(t, expectedLBNoFEConfigName, resourceGroupName, subscriptionID)
 		//assert.Equal(t, 0, len(actualLBNoFEConfigFeConfigNames))
-	})
+
 }
