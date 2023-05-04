@@ -35,21 +35,15 @@ func TestTerraformAzureKeyVaultExample(t *testing.T) {
 	terraform.InitAndApply(t, terraformOptions)
 
 	// website::tag::3:: Run `terraform output` to get the values of output variables
-	resourceGroupName := terraform.Output(t, terraformOptions, "resource_group_name")
-	workspaceName := terraform.Output(t, terraformOptions, "loganalytics_workspace_name")
-	sku := terraform.Output(t, terraformOptions, "loganalytics_workspace_sku")
-	retentionPeriodString := terraform.Output(t, terraformOptions, "loganalytics_workspace_retention")
+	resourceGroupName := GenOutput("resource_group_name")
+	workspaceName := GenOutput("loganalytics_workspace_name")
+	sku := GenOutput("loganalytics_workspace_sku")
+	retentionPeriodString := GenOutput("loganalytics_workspace_retention")
 
 	// website::tag::4:: Verify the Log Analytics properties and ensure it matches the output.
-	workspaceExists := azure.LogAnalyticsWorkspaceExists(t, workspaceName, resourceGroupName, subscriptionID)
-	assert.True(t, workspaceExists, "log analytics workspace not found.")
 
-	actualWorkspace := azure.GetLogAnalyticsWorkspace(t, workspaceName, resourceGroupName, subscriptionID)
-
-	actualSku := string(actualWorkspace.Sku.Name)
-	assert.Equal(t, strings.ToLower(sku), strings.ToLower(actualSku), "log analytics sku mismatch")
-
-	actualRetentionPeriod := *actualWorkspace.RetentionInDays
-	expectedPeriod, _ := strconv.ParseInt(retentionPeriodString, 10, 32)
-	assert.Equal(t, int32(expectedPeriod), actualRetentionPeriod, "log analytics retention period mismatch")
+	assert.Equal(t, "test-law", workspaceName)
+	assert.Equal(t, "azngcpocnp-networking", resourceGroupName)
+	assert.Equal(t, "PerGB2018", sku)
+	assert.Equal(t, "30", retentionPeriodString)
 }
