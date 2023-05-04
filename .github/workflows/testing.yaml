@@ -37,8 +37,8 @@ jobs:
           az login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
           az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: Download Go modules
-        working-directory: terraform-azure-loganalytics/test
+        working-directory: terraform-azure-recoveryservicesvault/test
         run: go mod download
       - name: Run tests
-        working-directory: terraform-azure-loganalytics/test
+        working-directory: terraform-azure-recoveryservicesvault/test
         run: go test -tags azure .
