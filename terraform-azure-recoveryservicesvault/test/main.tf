@@ -45,7 +45,7 @@ resource "azurerm_backup_policy_vm" "this" {
   }
 
   dynamic "retention_monthly" {
-    for_each = each.value["retention_settings"] != null ? (lookup(each.value["retention_settings"], "monthly") != null ? tolist(lookup(each.value["retention_settings"], "monthly")) : []) : []
+    for_each = each.value["retention_settings"] != null ? (lookup(each.value["retention_settings"], "monthly") != null ? tolist(lookup(each.value["retention_settings"], "monthly")) : []
     content {
       count    = element(split(":", retention_monthly.value), 0)
       weekdays = split(",", element(split(":", retention_monthly.value), 1))
@@ -54,7 +54,7 @@ resource "azurerm_backup_policy_vm" "this" {
   }
 
   dynamic "retention_yearly" {
-    for_each = each.value["retention_settings"] != null ? (lookup(each.value["retention_settings"], "yearly") != null ? tolist(lookup(each.value["retention_settings"], "yearly")) : []) : []
+    for_each = each.value["retention_settings"] != null ? (lookup(each.value["retention_settings"], "yearly") != null ? tolist(lookup(each.value["retention_settings"], "yearly")) : []
     content {
       count    = element(split(":", retention_yearly.value), 0)
       weekdays = split(",", element(split(":", retention_yearly.value), 1))
