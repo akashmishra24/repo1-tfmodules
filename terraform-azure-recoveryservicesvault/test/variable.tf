@@ -20,7 +20,7 @@ variable "recovery_services_vaults" {
       weekdays  = string # (Optional) The days of the week to perform backups on and weekdays should be seperated by ','(comma).
     })
     retention_settings = object({
-      daily   = number # (Required) The number of daily backups to keep. Must be between 1 and 9999
+      daily   = string # (Required) The number of daily backups to keep. Must be between 1 and 9999
       weekly  = string # count:weekdays and weekdays should be seperated by ','(comma)
       monthly = string # count:weekdays:weeks and weekdays & weeks should be seperated by ','(comma)
       yearly  = string # count:weekdays:weeks:months and weekdays, weeks & months should be seperated by ','(comma)
