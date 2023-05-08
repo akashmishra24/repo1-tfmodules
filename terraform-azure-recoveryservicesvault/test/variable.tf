@@ -19,12 +19,12 @@ variable "recovery_services_vaults" {
       time      = string # (Required) The time of day to perform the backup in 24hour format.
       weekdays  = string # (Optional) The days of the week to perform backups on and weekdays should be seperated by ','(comma).
     })
-    retention_settings = object({
+    retention_settings = list(object({
       daily   = number # (Required) The number of daily backups to keep. Must be between 1 and 9999
       weekly  = string # count:weekdays and weekdays should be seperated by ','(comma)
       monthly = string # count:weekdays:weeks and weekdays & weeks should be seperated by ','(comma)
       yearly  = string # count:weekdays:weeks:months and weekdays, weeks & months should be seperated by ','(comma)
-    })
+    }))
   }))
   description = "Map of recover services vaults properties"
 }
