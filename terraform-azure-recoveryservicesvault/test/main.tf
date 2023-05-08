@@ -30,7 +30,7 @@ resource "azurerm_backup_policy_vm" "this" {
   }
 
   dynamic "retention_daily" {
-    for_each = coalesce(lookup(each.value["backup_settings"], "frequency"), "Daily") == "Daily" && each.value["retention_settings"] != null ? tolist(lookup(each.value["retention_settings"], "daily")) : []
+    for_each = coalesce(lookup(each.value["backup_settings"], "frequency"), "Daily") == "Daily" && each.value["retention_settings"] != null ? toset(lookup(each.value["retention_settings"], "daily")) : []
     content {
       count = retention_daily.value
     }
