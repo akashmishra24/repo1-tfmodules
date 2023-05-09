@@ -37,8 +37,7 @@ module "loganalytics-admin" {
   name                = var.name
   sku                 = var.sku
   retention_in_days   = var.retention_in_days
-  #key_vault_id        = data.azurerm_key_vault.kv.0.id
-  tags = var.tags
+  tags                = var.tags
   depends_on = [
     data.azurerm_key_vault.kv
   ]
