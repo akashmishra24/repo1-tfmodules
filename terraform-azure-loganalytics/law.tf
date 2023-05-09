@@ -37,7 +37,6 @@ resource "azurerm_log_analytics_workspace" "law" {
   sku                                = var.sku
   retention_in_days                  = var.retention_in_days
   allow_resource_only_permissions    = var.allow_resource_only_permissions
-  local_authentication_disabled      = var.local_authentication_disabled
   daily_quota_gb                     = var.daily_quota_gb
   reservation_capacity_in_gb_per_day = var.sku == "CapacityReservation" ? var.reservation_capacity_in_gb_per_day : null
   internet_ingestion_enabled         = var.internet_ingestion_enabled

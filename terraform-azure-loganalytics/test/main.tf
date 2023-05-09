@@ -30,7 +30,7 @@ resource "azurerm_resource_group" "rg" {
 # Create Log Analytics Workspace
 #---------------------------------------------------------
 
-module "loganalytics" {
+module "loganalytics-admin" {
   # validate the source path before executing the module.   
   source              = "../"
   resource_group_name = var.resource_group_name
