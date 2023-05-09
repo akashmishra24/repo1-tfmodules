@@ -3,13 +3,13 @@ output "resource_group_name" {
 }
 
 output "loganalytics_workspace_name" {
-  value = azurerm_log_analytics_workspace.law.name
+  value = module.loganalytics.name
 }
 
 output "loganalytics_workspace_sku" {
-  value = azurerm_log_analytics_workspace.law.sku
+  value = module.loganalytics.sku
 }
 
 output "loganalytics_workspace_retention" {
-  value = azurerm_log_analytics_workspace.law.retention_in_days
+  value = module.loganalytics.retention_in_days
 }
