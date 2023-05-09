@@ -43,16 +43,16 @@ output "azurerm_resource_group_tags" {
   value       = data.azurerm_resource_group.azlb.tags
 }
 
-output "lb_private_name" {
+output "name" {
   value = azurerm_lb.azlb.name
 }
 
-output "lb_public_name" {
+output "pp_name" {
   value = azurerm_public_ip.azlb[*].name
 }
 
 
-output "public_address_name" {
+output "pip_name" {
   value = azurerm_public_ip.azlb[*].name
 }
 
