@@ -17,7 +17,7 @@ locals {
 module "loadbalancer" {
   source                                 = "../"
   type                                   = var.type
-  resource_group_name                    = data.azurerm_resource_group.azlb
+  resource_group_name                    = var.resource_group_name
   frontend_subnet_id                     = var.frontend_subnet_id
   frontend_private_ip_address_allocation = var.frontend_private_ip_address_allocation
   frontend_private_ip_address            = var.frontend_private_ip_address
