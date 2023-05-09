@@ -1,6 +1,7 @@
 variable "tags" {
   type        = map(any)
   description = "The tag values for the deployment"
+  default     = "azngcpocnp-networking"
 }
 
 variable "nsg_prefix" {

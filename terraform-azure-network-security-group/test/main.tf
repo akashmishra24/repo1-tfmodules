@@ -30,8 +30,6 @@ resource "azurerm_network_security_group" "nsg" {
       destination_address_prefixes = lookup(security_rule.value, "destination_address_prefixes", null)
     }
   }
-
-  tags = var.tags
 }
 
 # resource "azurerm_subnet_network_security_group_association" "subnet_nsg_association" {
