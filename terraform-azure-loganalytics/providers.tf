@@ -1,18 +1,10 @@
 terraform {
-  required_version = "1.3.5"
   required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "3.50.0"
-    }
+    azuread = "~> 2.31.0"
+    azurerm = "~> 3.37.0"
   }
 }
 
 provider "azurerm" {
-  features {
-  }
-}
-
-provider "random" {
-  # Configuration options
+  features {}
 }
