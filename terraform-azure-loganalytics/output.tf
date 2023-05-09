@@ -24,6 +24,16 @@ output "law_name" {
   value       = azurerm_log_analytics_workspace.law.name
 }
 
+output "sku" {
+  description = ""
+  value       = azurerm_log_analytics_workspace.law.sku
+}
+
+output "retention_in_days" {
+  description = ""
+  value       = azurerm_log_analytics_workspace.law.retention_in_days
+}
+
 output "law_key" {
   description = ""
   value       = azurerm_log_analytics_workspace.law.primary_shared_key
