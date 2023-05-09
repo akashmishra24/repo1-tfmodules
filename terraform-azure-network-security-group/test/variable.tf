@@ -1,8 +1,3 @@
-variable "tags" {
-  type        = map(any)
-  description = "The tag values for the deployment"
-
-}
 
 variable "nsg_prefix" {
   type        = string
