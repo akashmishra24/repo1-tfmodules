@@ -1,7 +1,7 @@
 variable "tags" {
   type        = map(any)
   description = "The tag values for the deployment"
-  default     = "azngcpocnp-networking"
+
 }
 
 variable "nsg_prefix" {
@@ -29,6 +29,7 @@ variable "nsg_rules" {
 variable "resource_group_name" {
   type        = string
   description = "The name of resource group"
+  default     = "azngcpocnp-networking"
 }
 
 variable "subnet_id_nsg" {
