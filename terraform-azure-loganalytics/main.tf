@@ -60,14 +60,14 @@ resource "azurerm_log_analytics_solution" "law_solution" {
 
 resource "azurerm_key_vault_secret" "law_primary_key" {
   count        = var.key_vault_name != null ? 1 : 0
-  name         = "${var.law_name}-primary-key"
+  name         = "${var.name}-primary-key"
   value        = azurerm_log_analytics_workspace.law.primary_shared_key
   key_vault_id = data.azurerm_key_vault.kv.0.id
 }
 
 resource "azurerm_key_vault_secret" "law_secondary_key" {
   count        = var.key_vault_name != null ? 1 : 0
-  name         = "${var.law_name}-secondary-key"
+  name         = "${var.name}-secondary-key"
   value        = azurerm_log_analytics_workspace.law.secondary_shared_key
   key_vault_id = data.azurerm_key_vault.kv.0.id
 }

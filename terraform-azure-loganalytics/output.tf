@@ -28,11 +28,3 @@ output "law_key" {
   description = ""
   value       = azurerm_log_analytics_workspace.law.primary_shared_key
 }
-
-
-output "law_id_map" {
-  value = {
-    for x in list(azurerm_log_analytics_workspace.law) :
-    x.name => x.id
-  }
-}
