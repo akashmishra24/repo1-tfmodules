@@ -19,7 +19,7 @@ output "law_workspace" {
   value       = azurerm_log_analytics_workspace.law
 }
 
-output "law_name" {
+output "name" {
   description = ""
   value       = azurerm_log_analytics_workspace.law.name
 }
