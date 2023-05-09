@@ -1,14 +1,14 @@
 output "lb_private_name" {
-  value = azurerm_lb.azlb.name
+  value = module.loadbalancer.name
 }
 
 output "lb_public_name" {
-  value = azurerm_public_ip.azlb[*].name
+  value = module.loadbalancer.pip_name
 }
 
 
 output "public_address_name" {
-  value = azurerm_public_ip.azlb[*].name
+  value = module.loadbalancer.pip_name
 }
 
 output "resource_group_name" {
