@@ -40,6 +40,6 @@ module "loganalytics" {
   #key_vault_id        = data.azurerm_key_vault.kv.0.id
   tags = var.tags
   depends_on = [
-    azurerm_key_vault.kv
+    data.azurerm_key_vault.kv
   ]
 }

@@ -1,5 +1,7 @@
 resource_group_name = "azngcpocnp-networking"
 name                = "test-law"
+sku                 = "PerGB2018"
+retention_in_days   = "30"
 las = {
   solution1 = {
     solution_name = "test-solution"

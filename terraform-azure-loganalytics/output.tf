@@ -13,3 +13,26 @@ output "log_analytics_workspace_key" {
   value       = azurerm_log_analytics_workspace.law.primary_shared_key
   sensitive   = true
 }
+
+output "law_workspace" {
+  description = ""
+  value       = azurerm_log_analytics_workspace.law
+}
+
+output "law_name" {
+  description = ""
+  value       = azurerm_log_analytics_workspace.law.name
+}
+
+output "law_key" {
+  description = ""
+  value       = azurerm_log_analytics_workspace.law.primary_shared_key
+}
+
+
+output "law_id_map" {
+  value = {
+    for x in list(azurerm_log_analytics_workspace.law) :
+    x.name => x.id
+  }
+}
