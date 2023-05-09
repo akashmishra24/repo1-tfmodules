@@ -15,7 +15,7 @@ variable "location" {
 ############################
 # log analytics
 ############################
-variable "law_name" {
+variable "name" {
   type        = string
   description = "Specifies the name of the Log Analytics Workspace"
 }

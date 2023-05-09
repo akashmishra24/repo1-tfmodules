@@ -1,5 +1,5 @@
 resource_group_name = "azngcpocnp-networking"
-law_name            = "test-law"
+name                = "test-law"
 las = {
   solution1 = {
     solution_name = "test-solution"

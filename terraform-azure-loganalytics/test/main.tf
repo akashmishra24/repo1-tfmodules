@@ -34,11 +34,11 @@ module "loganalytics" {
   # validate the source path before executing the module.   
   source              = "../"
   resource_group_name = var.resource_group_name
-  name                = var.law_name
+  name                = var.name
   sku                 = var.sku
   retention_in_days   = var.retention_in_days
-  key_vault_id        = data.azurerm_key_vault.kv.0.id
-  tags                = var.tags
+  #key_vault_id        = data.azurerm_key_vault.kv.0.id
+  tags = var.tags
   depends_on = [
     azurerm_key_vault.kv
   ]

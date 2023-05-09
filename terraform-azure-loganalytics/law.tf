@@ -31,7 +31,7 @@ resource "azurerm_resource_group" "rg" {
 # Create Log Analytics Workspace
 #----------------------------------------------------------
 resource "azurerm_log_analytics_workspace" "law" {
-  name                               = var.law_name
+  name                               = var.name
   resource_group_name                = local.resource_group_name
   location                           = local.location
   sku                                = var.sku

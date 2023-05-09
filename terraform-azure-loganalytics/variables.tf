@@ -15,7 +15,7 @@ variable "location" {
 ############################
 # log analytics
 ############################
-variable "law_name" {
+variable "name" {
   type        = string
   description = "Specifies the name of the Log Analytics Workspace"
 }
@@ -50,31 +50,31 @@ variable "key_vault_rg_name" {
 }
 
 variable "allow_resource_only_permissions" {
-  default = true
+  default     = true
   description = "(Optional) Specifies if the log Analytics Workspace allow users accessing to data associated with resources they have permission to view, without permission to workspace."
 }
 
 variable "local_authentication_disabled" {
-  default = false
+  default     = false
   description = "(Optional) Specifies if the log Analytics workspace should enforce authentication using Azure AD."
 }
 
 variable "daily_quota_gb" {
   description = "(Optional) The workspace daily quota for ingestion in GB. Defaults to -1 (unlimited) if omitted."
-  default = null
+  default     = null
 }
 
 variable "internet_ingestion_enabled" {
   description = "(Optional) Should the Log Analytics Workspace support ingestion over the Public Internet? Defaults to true"
-  default = true
+  default     = true
 }
 
 variable "internet_query_enabled" {
   description = "(Optional) Should the Log Analytics Workspace support querying over the Public Internet? Defaults to true."
-  default = true
+  default     = true
 }
 
 variable "reservation_capacity_in_gb_per_day" {
   description = "(Optional) The capacity reservation level in GB for this workspace. Must be in increments of 100 between 100 and 5000."
-  default = null
+  default     = null
 }
