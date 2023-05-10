@@ -45,6 +45,6 @@ func TestTerraformAzureKeyVaultExample(t *testing.T) {
 	assert.Equal(t, "azngcpocnp-networking", resourceGroupName)
 	assert.Equal(t, "PerGB2018", sku)
 	assert.Equal(t, "30", retentionPeriodString)
-	assert.Equal(t, "keyvault-test", retentionPeriodString)
+	assert.Equal(t, "keyvault-test", keyvault)
 
 }
