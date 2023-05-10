@@ -9,12 +9,11 @@ data "azurerm_resource_group" "rg" {
 # }
 
 resource "azurerm_network_security_group" "nsg" {
-  for_each            = var.network_security_groups
-  name                = each.value["name"]
+  name                = "nsg-${var.nsg_prefix}-${var.workload}-${data.azurerm_resource_group.rg.location}-${var.environment}"
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
   dynamic "security_rule" {
-    for_each = lookup(each.value, "security_rules", [])
+    for_each = var.nsg_rules
     content {
       name                         = security_rule.value["name"]
       priority                     = security_rule.value["priority"]
@@ -31,6 +30,7 @@ resource "azurerm_network_security_group" "nsg" {
       destination_address_prefixes = lookup(security_rule.value, "destination_address_prefixes", null)
     }
   }
+
 }
 
 # resource "azurerm_subnet_network_security_group_association" "subnet_nsg_association" {
@@ -41,8 +41,7 @@ resource "azurerm_network_security_group" "nsg" {
 resource "azurerm_subnet_network_security_group_association" "subnet_nsg_association" {
   for_each                  = var.subnet_ids
   subnet_id                 = each.value["subnet_id"]
-  network_security_group_id = lookup(azurerm_network_security_group.nsg, each.value["nsg_key"], null)["id"]
-
+  network_security_group_id = azurerm_network_security_group.nsg.id
   depends_on = [
     azurerm_network_security_group.nsg
   ]
