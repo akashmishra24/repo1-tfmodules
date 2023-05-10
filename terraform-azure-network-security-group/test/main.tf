@@ -9,7 +9,8 @@ data "azurerm_resource_group" "rg" {
 # }
 
 resource "azurerm_network_security_group" "nsg" {
-  name                = "nsg-${var.nsg_prefix}-${var.workload}-${data.azurerm_resource_group.rg.location}-${var.environment}"
+  for_each            = var.network_security_groups
+  name                = each.value["name"]
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
   dynamic "security_rule" {
