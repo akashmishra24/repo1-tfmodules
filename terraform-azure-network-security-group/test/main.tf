@@ -41,7 +41,7 @@ resource "azurerm_network_security_group" "nsg" {
 resource "azurerm_subnet_network_security_group_association" "subnet_nsg_association" {
   for_each                  = var.subnet_ids
   subnet_id                 = each.value["subnet_id"]
-  network_security_group_id = lookup(azurerm_network_security_group.this, each.value["nsg_key"], null)["id"]
+  network_security_group_id = lookup(azurerm_network_security_group.nsg, each.value["nsg_key"], null)["id"]
 
   depends_on = [
     azurerm_network_security_group.nsg

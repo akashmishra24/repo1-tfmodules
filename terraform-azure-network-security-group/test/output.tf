@@ -3,5 +3,5 @@ output "resource_group_name" {
 }
 
 output "nsg_name" {
-  value = azurerm_network_security_group.nsg[each.key].name
+  value = azurerm_network_security_group.nsg[*].name
 }
