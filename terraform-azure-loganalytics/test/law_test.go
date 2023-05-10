@@ -37,6 +37,7 @@ func TestTerraformAzureKeyVaultExample(t *testing.T) {
 	workspaceName := GenOutput("loganalytics_workspace_name")
 	sku := GenOutput("loganalytics_workspace_sku")
 	retentionPeriodString := GenOutput("loganalytics_workspace_retention")
+	keyvault := GenOutput("key_vault")
 
 	// website::tag::4:: Verify the Log Analytics properties and ensure it matches the output.
 
@@ -44,4 +45,6 @@ func TestTerraformAzureKeyVaultExample(t *testing.T) {
 	assert.Equal(t, "azngcpocnp-networking", resourceGroupName)
 	assert.Equal(t, "PerGB2018", sku)
 	assert.Equal(t, "30", retentionPeriodString)
+	assert.Equal(t, "keyvault-test", retentionPeriodString)
+
 }

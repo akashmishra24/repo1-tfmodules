@@ -1,6 +1,7 @@
 resource_group_name = "azngcpocnp-networking"
 name                = "test-law"
 sku                 = "PerGB2018"
+key_vault           = "keyvault-test"
 retention_in_days   = "30"
 las = {
   solution1 = {

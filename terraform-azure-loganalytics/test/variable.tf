@@ -41,13 +41,10 @@ variable "las" {
   # Product = "Security","SecurityInsights","AgentHealthAssessment","AzureActivity","SecurityCenterFree","DnsAnalytics","ADAssessment","AntiMalware","ServiceMap","SQLAssessment", "SQLAdvancedThreatProtection", "AzureAutomation", "Containers", "ChangeTracking", "Updates", "VMInsights"
 }
 
-variable "key_vault_name" {
+variable "key_vault" {
   default = null
 }
 
-variable "key_vault_rg_name" {
-  default = null
-}
 
 variable "allow_resource_only_permissions" {
   default     = true
