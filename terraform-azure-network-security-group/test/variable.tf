@@ -5,7 +5,7 @@ variable "nsg_prefix" {
   default     = "test"
 }
 
-variable "nsg_rules" {
+variable "network_security_groups" {
   #  type = list(object({
   #    name                       = string
   #    priority                   = number

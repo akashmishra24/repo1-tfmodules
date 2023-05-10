@@ -1,4 +1,4 @@
-nsg_rules = {
+network_security_groups = {
   nsg1 = {
     name = "nsg1"
     security_rules = [
