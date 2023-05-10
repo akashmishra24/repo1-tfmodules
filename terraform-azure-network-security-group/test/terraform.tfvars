@@ -1,6 +1,6 @@
 nsg_rules = {
-  name = "nsg1"
-  security_rules = [
+  #name = "nsg1"
+  #security_rules = [
     {
       name                                         = "sample-nsg"
       description                                  = "Sample NSG"
@@ -19,5 +19,5 @@ nsg_rules = {
       source_application_security_group_names      = ["asg-first"]
       destination_application_security_group_names = ["asg-second"]
     }
-  ]
+  #]
 }
