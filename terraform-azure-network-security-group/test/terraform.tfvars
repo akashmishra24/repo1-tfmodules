@@ -1,4 +1,5 @@
 nsg_rules = {
+  name = "nsg1"
   security_rules = [
     {
       name                                         = "sample-nsg"
