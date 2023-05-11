@@ -24,7 +24,6 @@ module "loganalytics-test" {
   resource_group_name = var.resource_group_name
   name                = var.name
   sku                 = var.sku
-  key_vault           = var.key_vault
   retention_in_days   = var.retention_in_days
   tags                = var.tags
   depends_on = [
