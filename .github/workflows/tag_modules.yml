@@ -37,13 +37,13 @@ jobs:
       - name: Get current version
         id: get_current_version
         run: |
-          VERSION=$(git describe --abbrev=0 --tags)
+          VERSION=$(git describe --abbrev=0 --tags || echo "v0.0.0")
           echo "CURRENT_VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Generate new version
         id: generate_version
         run: |
-          IFS='.' read -ra VERSION_PARTS <<< "${{ env.CURRENT_VERSION }}"
+          IFS='.' read -ra VERSION_PARTS <<< "${{ env.CURRENT_VERSION#v }}"
           MAJOR=${VERSION_PARTS[0]}
           MINOR=${VERSION_PARTS[1]}
           PATCH=${VERSION_PARTS[2]}
