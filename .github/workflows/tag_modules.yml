@@ -20,12 +20,12 @@ jobs:
         run: |
           COMMIT_MSG=$(git log --format=%B -n 1 ${{github.sha}})
           if [[ $COMMIT_MSG =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
-            echo "VERSION_NUMBER=${BASH_REMATCH[0]}" >> $GITHUB_ENV
+            echo "::set-output name=VERSION_NUMBER::${BASH_REMATCH[0]}"
           else
             echo "Commit message does not contain a version number. Skipping workflow." && exit 78
           fi
       - name: Tag and push current repo code
-        if: steps.check_commit_message.outputs.VERSION_NUMBER
+        if: steps.check_commit_message.outputs.VERSION_NUMBER != ''
         run: |
           echo "${{ steps.check_commit_message.outputs.VERSION_NUMBER }}"
           git tag ${{ steps.check_commit_message.outputs.VERSION_NUMBER }}
