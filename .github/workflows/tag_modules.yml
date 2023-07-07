@@ -41,12 +41,12 @@ jobs:
           if [[ -z $VERSION ]]; then
             VERSION="v1.0.0"
           fi
-          echo "CURRENT_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "CURRENT_VERSION=${VERSION#v}" >> $GITHUB_ENV
 
       - name: Generate new version
         id: generate_version
         run: |
-          IFS='.' read -ra VERSION_PARTS <<< "${{ env.CURRENT_VERSION#v }}"
+          IFS='.' read -ra VERSION_PARTS <<< "${{ env.CURRENT_VERSION }}"
           MAJOR=${VERSION_PARTS[0]}
           MINOR=${VERSION_PARTS[1]}
           PATCH=${VERSION_PARTS[2]}
