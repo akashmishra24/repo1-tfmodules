@@ -53,11 +53,11 @@ jobs:
           MINOR=${VERSION_PARTS[1]}
           PATCH=${VERSION_PARTS[2]}
 
-          if [[ ${{ env.VERSION_INCREMENT }} == "major" ]]; then
+          if [[ "${{ env.VERSION_INCREMENT }}" == "major" ]]; then
             ((MAJOR++))
             MINOR=0
             PATCH=0
-          elif [[ ${{ env.VERSION_INCREMENT }} == "minor" ]]; then
+          elif [[ "${{ env.VERSION_INCREMENT }}" == "minor" ]]; then
             ((MINOR++))
             PATCH=0
           else
