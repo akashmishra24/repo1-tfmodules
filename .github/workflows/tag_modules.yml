@@ -43,7 +43,7 @@ jobs:
       - name: Generate new version
         id: generate_version
         run: |
-          IFS='.' read -ra VERSION_PARTS <<< "${{ env.CURRENT_VERSION#v }}"
+          IFS='.' read -ra VERSION_PARTS <<< "${{ env.CURRENT_VERSION }}"
           MAJOR=${VERSION_PARTS[0]}
           MINOR=${VERSION_PARTS[1]}
           PATCH=${VERSION_PARTS[2]}
