@@ -1,74 +1,32 @@
-name: Auto Tagging
+name: Tagging the TF Modules
 
 on:
-  pull_request:
-    types:
-      - closed
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+    paths-ignore: "./github/workflows/tag_modules.yml"
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore: "./github/workflows/tag_modules.yml"
+  workflow_dispatch:
 
 jobs:
-  tag:
+  tag_repo:
+    name: Get runner id and tag the current code snapshot
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-
-      - name: Set up Git
+      - uses: actions/checkout@v2
+      - name: Check commit message for version number
+        id: check_commit_message
         run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-
-      - name: Determine version increment
-        id: determine_increment
-        if: ${{ github.event_name == 'pull_request' }}
-        run: |
-          COMMIT_MSG=$(git log --format=%B -n 1 ${{ github.event.pull_request.merge_commit_sha }})
-          if [[ $COMMIT_MSG =~ \[major\] ]]; then
-            echo "VERSION_INCREMENT=major" >> $GITHUB_ENV
-          elif [[ $COMMIT_MSG =~ \[minor\] ]]; then
-            echo "VERSION_INCREMENT=minor" >> $GITHUB_ENV
+          COMMIT_MSG=$(git log --format=%B -n 1 ${{github.sha}})
+          if [[ $COMMIT_MSG =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            echo "VERSION_NUMBER=${BASH_REMATCH[0]}" >> $GITHUB_ENV
           else
-            echo "VERSION_INCREMENT=patch" >> $GITHUB_ENV
+            echo "Commit message does not contain a version number. Skipping workflow." && exit 78
           fi
-
-      - name: Get current version
-        id: get_current_version
+      - name: Tag and push current repo code
+        if: steps.check_commit_message.outputs.VERSION_NUMBER
         run: |
-          LAST_TAG=$(git rev-list --tags --max-count=1)
-          if [[ -n $LAST_TAG ]]; then
-            VERSION=$(git describe --tags --abbrev=0 $LAST_TAG)
-          else
-            VERSION="v1.0.0"
-          fi
-          echo "CURRENT_VERSION=${VERSION#v}" >> $GITHUB_ENV
-
-      - name: Generate new version
-        id: generate_version
-        run: |
-          IFS='.' read -ra VERSION_PARTS <<< "${{ env.CURRENT_VERSION }}"
-          MAJOR=${VERSION_PARTS[0]}
-          MINOR=${VERSION_PARTS[1]}
-          PATCH=${VERSION_PARTS[2]}
-
-          if [[ "${{ env.VERSION_INCREMENT }}" == "major" ]]; then
-            ((MAJOR++))
-            MINOR=0
-            PATCH=0
-          elif [[ "${{ env.VERSION_INCREMENT }}" == "minor" ]]; then
-            ((MINOR++))
-            PATCH=0
-          else
-            ((PATCH++))
-          fi
-
-          NEW_VERSION="v${MAJOR}.${MINOR}.${PATCH}"
-          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
-
-      - name: Create tag
-        run: |
-          echo "${{ env.NEW_VERSION }}" # Display the new version for verification
-          git tag ${{ env.NEW_VERSION }}
-          git push origin ${{ env.NEW_VERSION }}
+          echo "${{ steps.check_commit_message.outputs.VERSION_NUMBER }}"
+          git tag ${{ steps.check_commit_message.outputs.VERSION_NUMBER }}
+          git push origin ${{ steps.check_commit_message.outputs.VERSION_NUMBER }}
