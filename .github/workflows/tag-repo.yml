@@ -1,0 +1,32 @@
+name: Tagging the TF Modules
+
+on:
+  push:
+    branches: [ "main" ]
+    paths-ignore: "./github/workflows/tag_modules.yml"
+  pull_request:
+    types:
+      - closed
+  workflow_dispatch:
+
+jobs:
+  tag_repo:
+    name: Get runner id and tag the current code snapshot
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check commit message for version number
+        id: check_commit_message
+        run: |
+          COMMIT_MSG=$(git log --format=%B -n 1 ${{github.sha}})
+          if [[ $COMMIT_MSG =~ v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            echo "::set-output name=VERSION_NUMBER::${BASH_REMATCH[0]}"
+          else
+            echo "Commit message does not contain a version number. Skipping workflow." && exit 78
+          fi
+      - name: Tag and push current repo code
+        if: steps.check_commit_message.outputs.VERSION_NUMBER != '' && steps.check_commit_message.outputs.VERSION_NUMBER != 'skip'
+        run: |
+          echo "${{ steps.check_commit_message.outputs.VERSION_NUMBER }}"
+          git tag ${{ steps.check_commit_message.outputs.VERSION_NUMBER }}
+          git push origin ${{ steps.check_commit_message.outputs.VERSION_NUMBER }}
