@@ -37,8 +37,10 @@ jobs:
       - name: Get current version
         id: get_current_version
         run: |
-          VERSION=$(git describe --abbrev=0 --tags 2>/dev/null)
-          if [[ -z $VERSION ]]; then
+          LAST_TAG=$(git rev-list --tags --max-count=1)
+          if [[ -n $LAST_TAG ]]; then
+            VERSION=$(git describe --tags --abbrev=0 $LAST_TAG)
+          else
             VERSION="v1.0.0"
           fi
           echo "CURRENT_VERSION=${VERSION#v}" >> $GITHUB_ENV
