@@ -4,6 +4,9 @@ on:
   pull_request:
     types:
       - closed
+  push:
+    branches:
+      - main
 
 jobs:
   tag:
@@ -20,6 +23,7 @@ jobs:
 
       - name: Determine version increment
         id: determine_increment
+        if: ${{ github.event_name == 'pull_request' }}
         run: |
           COMMIT_MSG=$(git log --format=%B -n 1 ${{ github.event.pull_request.merge_commit_sha }})
           if [[ $COMMIT_MSG =~ \[major\] ]]; then
