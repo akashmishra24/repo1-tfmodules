@@ -1,4 +1,4 @@
-name: increment_tag
+name: Auto Tagging
 
 on:
   pull_request:
@@ -39,7 +39,7 @@ jobs:
       - name: Get current version
         id: get_current_version
         run: |
-          LAST_TAG=$(git describe --abbrev=0 --tags 2>/dev/null)
+          LAST_TAG=$(git describe --abbrev=0 --tags 2>/dev/null || echo "")
           if [[ -z $LAST_TAG ]]; then
             VERSION="v1.0.0"
           else
