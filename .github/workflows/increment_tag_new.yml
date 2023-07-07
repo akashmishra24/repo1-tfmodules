@@ -1,4 +1,4 @@
-name: Auto Tagging New
+name: Auto Tagging
 
 on:
   pull_request:
@@ -72,5 +72,5 @@ jobs:
       - name: Create tag
         run: |
           echo "${{ env.NEW_VERSION }}" # Display the new version for verification
-          git tag ${{ env.NEW_VERSION }}
+          git tag -a ${{ env.NEW_VERSION }} -m "Version ${{ env.NEW_VERSION }}" --force
           git push origin ${{ env.NEW_VERSION }}
