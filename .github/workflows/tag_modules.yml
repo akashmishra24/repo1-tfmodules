@@ -1,25 +1,65 @@
-name: Tagging the TF Modules
+name: Auto Tagging
 
 on:
-# Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-    paths-ignore: "./github/workflows/tag_modules.yml"
-    
   pull_request:
-    branches: [ "main" ]
-    paths-ignore: "./github/workflows/tag_modules.yml"
-
-# Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+    types:
+      - closed
 
 jobs:
-  tag_repo:
-    name: Get runner id and tag the current code snapshot
+  tag:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Tag and push current repo code
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Git
         run: |
-          git tag ${{github.run_id}}
-          git push origin ${{github.run_id}}
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+
+      - name: Determine version increment
+        id: determine_increment
+        run: |
+          COMMIT_MSG=$(git log --format=%B -n 1 ${{ github.event.pull_request.merge_commit_sha }})
+          if [[ $COMMIT_MSG =~ \[major\] ]]; then
+            echo "VERSION_INCREMENT=major" >> $GITHUB_ENV
+          elif [[ $COMMIT_MSG =~ \[minor\] ]]; then
+            echo "VERSION_INCREMENT=minor" >> $GITHUB_ENV
+          else
+            echo "VERSION_INCREMENT=patch" >> $GITHUB_ENV
+          fi
+
+      - name: Get current version
+        id: get_current_version
+        run: |
+          VERSION=$(git describe --abbrev=0 --tags)
+          echo "CURRENT_VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Generate new version
+        id: generate_version
+        run: |
+          IFS='.' read -ra VERSION_PARTS <<< "${{ env.CURRENT_VERSION#v }}"
+          MAJOR=${VERSION_PARTS[0]}
+          MINOR=${VERSION_PARTS[1]}
+          PATCH=${VERSION_PARTS[2]}
+
+          if [[ ${{ env.VERSION_INCREMENT }} == "major" ]]; then
+            ((MAJOR++))
+            MINOR=0
+            PATCH=0
+          elif [[ ${{ env.VERSION_INCREMENT }} == "minor" ]]; then
+            ((MINOR++))
+            PATCH=0
+          else
+            ((PATCH++))
+          fi
+
+          NEW_VERSION="v${MAJOR}.${MINOR}.${PATCH}"
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+
+      - name: Create tag
+        run: |
+          echo "${{ env.NEW_VERSION }}" # Display the new version for verification
+          git tag ${{ env.NEW_VERSION }}
+          git push origin ${{ env.NEW_VERSION }}
