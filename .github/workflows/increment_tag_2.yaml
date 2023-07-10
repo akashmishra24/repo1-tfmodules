@@ -44,7 +44,7 @@ jobs:
           if [[ -z $LAST_TAG ]]; then
             VERSION="1.0.0"
           else
-            VERSION=${LAST_TAG}
+            VERSION=${LAST_TAG#v}
           fi
           echo "CURRENT_VERSION=$VERSION" >> $GITHUB_ENV
 
@@ -55,7 +55,7 @@ jobs:
           MAJOR=${VERSION_PARTS[0]}
           MINOR=${VERSION_PARTS[1]}
           PATCH=${VERSION_PARTS[2]}
-  
+
           if [[ "${{ env.VERSION_INCREMENT }}" == "major" ]]; then
             ((MAJOR++))
             MINOR=0
@@ -66,7 +66,7 @@ jobs:
           elif [[ "${{ env.VERSION_INCREMENT }}" == "patch" ]]; then
             ((PATCH++))
           fi
-  
+
           NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
