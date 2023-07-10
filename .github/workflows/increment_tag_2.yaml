@@ -26,11 +26,11 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         run: |
           COMMIT_MSG=$(git log --format=%B -n 1 ${{ github.event.pull_request.merge_commit_sha }})
-          if [[ $COMMIT_MSG == *"[major]"* ]]; then
+          if [[ $COMMIT_MSG =~ \[major\] ]]; then
             echo "VERSION_INCREMENT=major" >> $GITHUB_ENV
-          elif [[ $COMMIT_MSG == *"[minor]"* ]]; then
+          elif [[ $COMMIT_MSG =~ \[minor\] ]]; then
             echo "VERSION_INCREMENT=minor" >> $GITHUB_ENV
-          elif [[ $COMMIT_MSG == *"[patch]"* ]]; then
+          elif [[ $COMMIT_MSG =~ \[patch\] ]]; then
             echo "VERSION_INCREMENT=patch" >> $GITHUB_ENV
           else
             echo "VERSION_INCREMENT=none" >> $GITHUB_ENV
