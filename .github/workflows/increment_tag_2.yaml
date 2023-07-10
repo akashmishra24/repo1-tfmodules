@@ -1,12 +1,14 @@
 name: Auto Tagging
 
 on:
-  pull_request:
-    types:
-      - closed
   push:
     branches:
       - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - closed
 
 jobs:
   tag:
@@ -23,9 +25,8 @@ jobs:
 
       - name: Determine version increment
         id: determine_increment
-        if: ${{ github.event_name == 'pull_request' }}
         run: |
-          COMMIT_MSG=$(git log --format=%B -n 1 ${{ github.event.pull_request.merge_commit_sha }})
+          COMMIT_MSG=$(git log --format=%B -n 1 ${{ github.sha }})
           if [[ $COMMIT_MSG =~ \[major\] ]]; then
             echo "VERSION_INCREMENT=major" >> $GITHUB_ENV
           elif [[ $COMMIT_MSG =~ \[minor\] ]]; then
