@@ -1,4 +1,4 @@
-name: Auto Tagging_2
+name: Auto Tagging
 
 on:
   pull_request:
