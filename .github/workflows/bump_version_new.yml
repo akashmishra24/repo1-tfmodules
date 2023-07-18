@@ -31,7 +31,7 @@ jobs:
         
       - name: 'PHP Version Update'
         run: |
-         sed -i 's/\$semverversion = "[^"]*"/$semverversion = "'"${{ steps.version-bump.outputs.newTag }}"'"/' application/views/template/header.php
+         sed -i 's/\$semverversion = "[^"]*"/$semverversion = "'"${{ steps.version-bump.outputs.newTag }}"'"/' header.php
          git config --global user.email "akashmishra24@users.noreply.github.com"
          git config --global user.name "Akash Mishra"
          git commit -am "Update version in header"
