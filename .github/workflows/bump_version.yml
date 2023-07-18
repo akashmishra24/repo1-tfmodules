@@ -81,7 +81,7 @@ jobs:
         run: |
           git config user.name akashmishra24
           git config user.email akashmishra24@users.noreply.github.com
-          git tag ${{ steps.bump_version.outputs.new_version }} -m "Release ${{ steps.bump_version.outputs.new_version }}"
+          git tag -d ${{ steps.bump_version.outputs.new_version }} -m "Release ${{ steps.bump_version.outputs.new_version }}"
 
       - name: Push tags
         run: git push --force origin ${{ steps.bump_version.outputs.new_version }}
