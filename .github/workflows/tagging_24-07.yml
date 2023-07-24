@@ -1,4 +1,4 @@
-name: 'Bump Version on Merge to Main'
+name: 'Bump Version on PR Close and Merge to Main'
 on:
   pull_request:
     types:
@@ -12,31 +12,23 @@ jobs:
       - name: 'Checkout source code'
         uses: 'actions/checkout@v3'
 
-      - name: 'Get Merge Commit Message'
-        id: get-merge-commit-message
-        run: |
-          MERGE_COMMIT_MESSAGE=$(curl -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.groot-preview+json" "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/commits" | jq '.[-1].commit.message')
-          echo "Merge Message: $MERGE_COMMIT_MESSAGE" >> merge_message.txt
-
-      - name: 'Read Merge Commit Message'
-        id: read-merge-commit-message
-        run: |
-          echo "Merge Message: $(cat merge_message.txt)"
-        
       - name: 'Automated Version Bump'
         if: ${{ github.event.pull_request.merged == true }}
-        id: version-bump
         uses: 'phips28/gh-action-bump-version@master'
         with:
-          tag-prefix: 'v'
-          minor-wording:  'MINOR,minor'
-          major-wording:  'MAJOR,major'
-          patch-wording:  'PATCH,patch,fixes'
-          rc-wording:     'BETA'
+          minor-wording:  'add,Adds,new'
+          major-wording:  'MAJOR,cut-major'
+          patch-wording:  'patch,fixes'
+          rc-wording:     'RELEASE,alpha'
+          bump-policy: 'ignore'
+          skip-tag: 'false'
+          skip-commit: 'false'
+          skip-push: 'false'
+          PACKAGEJSON_DIR: '.'  # If your package.json is not in the root directory, specify its location here
           target-branch: 'main'
-          commit-message: '${{ steps.read-merge-commit-message.outputs.MERGE_MESSAGE }}'
+          commit-message: 'Bump version to {{version}}'  # Customize the commit message for version bump
         env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          
       - name: 'cat package.json'
         if: ${{ github.event.pull_request.merged == true }}
