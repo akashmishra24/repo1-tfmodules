@@ -1,4 +1,4 @@
-name: 'Bump Version on PR Close and Merge to Main'
+name: 'Bump Version on Merge to Main'
 on:
   pull_request:
     types:
@@ -9,57 +9,40 @@ jobs:
     name: 'Bump Version on semver'
     runs-on: ubuntu-latest
     steps:
-      - name: 'Check Base Ref'
-        id: check-base-ref
-        run: |
-          if [[ "${{ github.event.pull_request.base.ref }}" == "main" ]]; then
-            echo "::set-output name=merge_to_main::true"
-          else
-            echo "::set-output name=merge_to_main::false"
-          fi
-
       - name: 'Checkout source code'
         uses: 'actions/checkout@v3'
 
-      - name: 'Check Commit Message for Version Bump'
-        if: steps.check-base-ref.outputs.merge_to_main == 'true'
-        id: check-version-bump
+      - name: 'Get Merge Commit Message'
+        id: get-merge-commit-message
         run: |
-          if [[ $(git log --format=%B -n 1 ${{ github.sha }}) =~ (MAJOR|MINOR|PATCH) ]]; then
-            echo "::set-output name=bump::true"
-          else
-            echo "::set-output name=bump::false"
-          fi
+          echo "Merge Message: $(git log --format=%B -n 1 ${{ github.event.pull_request.head.sha }})" >> merge_message.txt
 
+      - name: 'Read Merge Commit Message'
+        id: read-merge-commit-message
+        run: |
+          echo "Merge Message: $(cat merge_message.txt)"
+        
       - name: 'Automated Version Bump'
-        if: steps.check-version-bump.outputs.bump == 'true' && steps.check-base-ref.outputs.merge_to_main == 'true'
+        if: ${{ github.event.pull_request.merged == true }}
         id: version-bump
         uses: 'phips28/gh-action-bump-version@master'
         with:
           tag-prefix: 'v'
-          minor-wording:  'MINOR'
-          major-wording:  'MAJOR'
-          patch-wording:  'PATCH'
+          minor-wording:  'MINOR,minor'
+          major-wording:  'MAJOR,major'
+          patch-wording:  'PATCH,patch,fixes'
           rc-wording:     'BETA'
+          target-branch: 'main'
+          commit-message: '${{ steps.read-merge-commit-message.outputs.MERGE_MESSAGE }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-
+         
       - name: 'cat package.json'
-        if: steps.check-version-bump.outputs.bump == 'true' && steps.check-base-ref.outputs.merge_to_main == 'true'
+        if: ${{ github.event.pull_request.merged == true }}
         run: cat ./package.json
-
-      - name: 'Commit and Push Changes'
-        if: steps.check-version-bump.outputs.bump == 'true' && steps.check-base-ref.outputs.merge_to_main == 'true'
-        run: |
-          git config --global user.name "akashmishra24"
-          git config --global user.email "akashmishra24@users.noreply.github.com"
-          git checkout main
-          git merge "${{ github.event.pull_request.head.ref }}" --no-commit --no-ff
-          git commit -m "Merge pull request #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}"
-          git push origin main
-
+         
       - name: 'Output Step'
-        if: steps.check-version-bump.outputs.bump == 'true' && steps.check-base-ref.outputs.merge_to_main == 'true'
+        if: ${{ github.event.pull_request.merged == true }}
         env:
           NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
         run: echo "new tag $NEW_TAG"
