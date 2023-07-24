@@ -21,9 +21,6 @@ jobs:
       - name: 'Checkout source code'
         uses: 'actions/checkout@v3'
 
-      - name: 'cat package.json'
-        run: cat ./package.json
-
       - name: 'Check Commit Message for Version Bump'
         if: steps.check-base-ref.outputs.merge_to_main == 'true'
         id: check-version-bump
@@ -48,7 +45,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
 
       - name: 'cat package.json'
+        if: steps.check-version-bump.outputs.bump == 'true' && steps.check-base-ref.outputs.merge_to_main == 'true'
         run: cat ./package.json
+
+      - name: 'Commit and Push Changes'
+        if: steps.check-version-bump.outputs.bump == 'true' && steps.check-base-ref.outputs.merge_to_main == 'true'
+        run: |
+          git config --global user.name "akashmishra24"
+          git config --global user.email "akashmishra24@users.noreply.github.com"
+          git checkout main
+          git merge "${{ github.event.pull_request.head.ref }}" --no-commit --no-ff
+          git commit -m "Merge pull request #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}"
+          git push origin main
 
       - name: 'Output Step'
         if: steps.check-version-bump.outputs.bump == 'true' && steps.check-base-ref.outputs.merge_to_main == 'true'
