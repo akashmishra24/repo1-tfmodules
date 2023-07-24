@@ -1,8 +1,9 @@
-name: 'Bump Version'
+name: 'Bump Version on Merge to Main'
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types:
+      - closed
+
 jobs:
   bump-version:
     name: 'Bump Version on semver'
@@ -11,10 +12,18 @@ jobs:
       - name: 'Checkout source code'
         uses: 'actions/checkout@v3'
 
-      - name: 'cat package.json'
-        run: cat ./package.json
+      - name: 'Get Merge Commit Message'
+        id: get-merge-commit-message
+        run: |
+          echo "Merge Message: $(git log --format=%B -n 1 ${{ github.event.pull_request.head.sha }})" >> merge_message.txt
+
+      - name: 'Read Merge Commit Message'
+        id: read-merge-commit-message
+        run: |
+          echo "Merge Message: $(cat merge_message.txt)"
         
       - name: 'Automated Version Bump'
+        if: ${{ github.event.pull_request.merged == true }}
         id: version-bump
         uses: 'phips28/gh-action-bump-version@master'
         with:
@@ -24,13 +33,16 @@ jobs:
           patch-wording:  'PATCH,patch,fixes'
           rc-wording:     'BETA'
           target-branch: 'main'
+          commit-message: '${{ steps.read-merge-commit-message.outputs.MERGE_MESSAGE }}'
         env:
-         GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
          
       - name: 'cat package.json'
+        if: ${{ github.event.pull_request.merged == true }}
         run: cat ./package.json
          
       - name: 'Output Step'
+        if: ${{ github.event.pull_request.merged == true }}
         env:
           NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
         run: echo "new tag $NEW_TAG"
