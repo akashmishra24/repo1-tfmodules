@@ -1,0 +1,57 @@
+name: 'Bump Version on PR Close and Merge to Main'
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  bump-version:
+    name: 'Bump Version on semver'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Check Base Ref'
+        id: check-base-ref
+        run: |
+          if [[ "${{ github.event.pull_request.base.ref }}" == "main" ]]; then
+            echo "::set-output name=merge_to_main::true"
+          else
+            echo "::set-output name=merge_to_main::false"
+          fi
+
+      - name: 'Checkout source code'
+        uses: 'actions/checkout@v3'
+
+      - name: 'cat package.json'
+        run: cat ./package.json
+
+      - name: 'Check Commit Message for Version Bump'
+        if: steps.check-base-ref.outputs.merge_to_main == 'true'
+        id: check-version-bump
+        run: |
+          if [[ $(git log --format=%B -n 1 ${{ github.sha }}) =~ (MAJOR|MINOR|PATCH) ]]; then
+            echo "::set-output name=bump::true"
+          else
+            echo "::set-output name=bump::false"
+          fi
+
+      - name: 'Automated Version Bump'
+        if: steps.check-version-bump.outputs.bump == 'true' && steps.check-base-ref.outputs.merge_to_main == 'true'
+        id: version-bump
+        uses: 'phips28/gh-action-bump-version@master'
+        with:
+          tag-prefix: 'v'
+          minor-wording:  'MINOR'
+          major-wording:  'MAJOR'
+          patch-wording:  'PATCH'
+          rc-wording:     'BETA'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+
+      - name: 'cat package.json'
+        run: cat ./package.json
+
+      - name: 'Output Step'
+        if: steps.check-version-bump.outputs.bump == 'true' && steps.check-base-ref.outputs.merge_to_main == 'true'
+        env:
+          NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
+        run: echo "new tag $NEW_TAG"
