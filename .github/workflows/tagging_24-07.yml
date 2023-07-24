@@ -21,7 +21,8 @@ jobs:
 
       - name: 'Read Merge Commit Message'
         id: read-merge-commit-message
-        run: echo "Merge Message: $(cat merge_message.txt)"
+        run: |
+          echo "Merge Message: $(cat merge_message.txt)"
         
       - name: 'Automated Version Bump'
         if: ${{ github.event.pull_request.merged == true }}
