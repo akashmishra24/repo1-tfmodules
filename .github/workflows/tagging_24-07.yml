@@ -15,7 +15,8 @@ jobs:
       - name: 'Get Merge Commit Message'
         id: get-merge-commit-message
         run: |
-          MERGE_COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.pull_request.head.sha }})
+          MERGE_COMMIT_SHA=$(jq '.pull_request.head.sha' $GITHUB_EVENT_PATH)
+          MERGE_COMMIT_MESSAGE=$(git log --format=%B -n 1 $MERGE_COMMIT_SHA)
           echo "Merge Message: $MERGE_COMMIT_MESSAGE" >> merge_message.txt
 
       - name: 'Read Merge Commit Message'
