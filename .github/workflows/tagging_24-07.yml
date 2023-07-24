@@ -15,14 +15,13 @@ jobs:
       - name: 'Get Merge Commit Message'
         id: get-merge-commit-message
         run: |
-          MERGE_COMMIT_SHA=$(jq '.pull_request.head.sha' $GITHUB_EVENT_PATH)
+          MERGE_COMMIT_SHA=$GITHUB_SHA
           MERGE_COMMIT_MESSAGE=$(git log --format=%B -n 1 $MERGE_COMMIT_SHA)
           echo "Merge Message: $MERGE_COMMIT_MESSAGE" >> merge_message.txt
 
       - name: 'Read Merge Commit Message'
         id: read-merge-commit-message
-        run: |
-          echo "Merge Message: $(cat merge_message.txt)"
+        run: echo "Merge Message: $(cat merge_message.txt)"
         
       - name: 'Automated Version Bump'
         if: ${{ github.event.pull_request.merged == true }}
