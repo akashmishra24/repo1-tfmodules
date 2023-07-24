@@ -1,4 +1,4 @@
-bgbgfgbfgv1.0.0
+v1.0.0
 test
 fhdgfh
 gdfgfd
