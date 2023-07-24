@@ -19,10 +19,11 @@ jobs:
         uses: 'phips28/gh-action-bump-version@master'
         with:
           tag-prefix: 'v'
-          minor-wording:  'MINOR'
-          major-wording:  'MAJOR'
-          patch-wording:  'PATCH'
+          minor-wording:  'MINOR,minor'
+          major-wording:  'MAJOR,major'
+          patch-wording:  'PATCH,patch,fixes'
           rc-wording:     'BETA'
+          target-branch: 'main'
         env:
          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
          
