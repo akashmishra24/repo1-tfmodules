@@ -12,8 +12,20 @@ jobs:
       - name: 'Checkout source code'
         uses: 'actions/checkout@v3'
 
+      - name: 'Get Merge Commit Message'
+        id: get-merge-commit-message
+        run: |
+          MERGE_COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.event.pull_request.head.sha }})
+          echo "Merge Message: $MERGE_COMMIT_MESSAGE" >> merge_message.txt
+
+      - name: 'Read Merge Commit Message'
+        id: read-merge-commit-message
+        run: |
+          echo "Merge Message: $(cat merge_message.txt)"
+        
       - name: 'Automated Version Bump'
         if: ${{ github.event.pull_request.merged == true }}
+        id: version-bump
         uses: 'phips28/gh-action-bump-version@master'
         with:
           minor-wording:  'add,Adds,new'
@@ -26,7 +38,7 @@ jobs:
           skip-push: 'false'
           PACKAGEJSON_DIR: '.'  # If your package.json is not in the root directory, specify its location here
           target-branch: 'main'
-          commit-message: 'Bump version to {{version}}'  # Customize the commit message for version bump
+          commit-message: '${{ steps.read-merge-commit-message.outputs.MERGE_MESSAGE }}'  # Use the fetched merge commit message
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          
