@@ -34,8 +34,8 @@ jobs:
           patch-wording:  'patch,fixes'
           rc-wording:     'RELEASE,alpha'
           bump-policy: 'all'
-          skip-tag: 'false'
-          skip-commit: 'false'
+          skip-commit:  'true'
+          skip-tag: 'true'
           skip-push: 'false'
           PACKAGEJSON_DIR: '.'  # If your package.json is not in the root directory, specify its location here
           target-branch: 'main'
