@@ -14,7 +14,7 @@ jobs:
       - name: 'Get Commit Messages'
         id: get-commits
         run: |
-          echo "COMMIT_MESSAGES=$(git log --pretty=%B | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_ENV
+          echo "COMMIT_MESSAGES=$(git log --pretty=%B)" >> $GITHUB_ENV
 
   bump-version:
     name: 'Bump Version on semver'
