@@ -5,8 +5,20 @@ on:
       - closed
 
 jobs:
+  get-commits:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout source code'
+        uses: 'actions/checkout@v3'
+
+      - name: 'Get Commit Messages'
+        id: get-commits
+        run: |
+          echo "COMMIT_MESSAGES=$(git log --pretty=%B | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_ENV
+
   bump-version:
     name: 'Bump Version on semver'
+    needs: get-commits
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout source code'
@@ -17,16 +29,12 @@ jobs:
         id: bump-version
         uses: 'akashmishra24/gh-action-bump-version@main'
         with:
-          minor-wording:  'add,Adds,new'
-          major-wording:  'MAJOR,cut-major'
-          patch-wording:  'patch,fixes'
-          rc-wording:     'RELEASE,alpha'
+          minor-wording: 'add,Adds,new'
+          major-wording: 'MAJOR,cut-major'
+          patch-wording: 'patch,fixes'
+          rc-wording: 'RELEASE,alpha'
           PACKAGEJSON_DIR: '.'  # If your package.json is not in the root directory, specify its location here
           target-branch: 'main'
-          commit-message: ${{ github.event.pull_request.head.commit.message }}
+          commit-message: ${{ env.COMMIT_MESSAGES }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 'Print Commit Messages'
-        run: |
-          echo "${{ github.event.pull_request.head.commit.message }}"
