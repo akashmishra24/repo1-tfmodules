@@ -33,13 +33,13 @@ jobs:
           major-wording:  'MAJOR,cut-major'
           patch-wording:  'patch,fixes'
           rc-wording:     'RELEASE,alpha'
-          default: ''
           bump-policy: 'all'
           skip-tag: 'false'
           skip-commit: 'false'
           skip-push: 'false'
           PACKAGEJSON_DIR: '.'  # If your package.json is not in the root directory, specify its location here
           target-branch: 'main'
+          check-last-commit-only: 'true'
           commit-message: '${{ steps.read-merge-commit-message.outputs.MERGE_MESSAGE }}'  # Use the fetched merge commit message
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
