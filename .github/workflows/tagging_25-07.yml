@@ -26,3 +26,7 @@ jobs:
           commit-message: ${{ github.event.pull_request.head.commit.message }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'Print Commit Messages'
+        run: |
+          echo "${{ github.event.pull_request.head.commit.message }}"
