@@ -13,8 +13,8 @@ jobs:
 
       - name: 'Get Commit Messages'
         id: get-commits
-        run: |
-          echo "COMMIT_MESSAGES=$(git log --pretty=%B)" >> $GITHUB_ENV
+        run: echo "COMMIT_MESSAGES=$(git log --pretty=%B)" >> $GITHUB_ENV
+        shell: bash
 
   bump-version:
     name: 'Bump Version on semver'
@@ -35,6 +35,6 @@ jobs:
           rc-wording:     'RELEASE,alpha'
           PACKAGEJSON_DIR: '.'  # If your package.json is not in the root directory, specify its location here
           target-branch: 'main'
-          commit-message: ${{ steps.get-commits.outputs.COMMIT_MESSAGES }}
+          commit-message: ${{ env.COMMIT_MESSAGES }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
