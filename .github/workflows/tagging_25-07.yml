@@ -18,8 +18,8 @@ jobs:
 
   bump-version:
     name: 'Bump Version on semver'
-    needs: get-commits
     runs-on: ubuntu-latest
+    needs: get-commits
     steps:
       - name: 'Checkout source code'
         uses: 'actions/checkout@v3'
@@ -29,12 +29,12 @@ jobs:
         id: bump-version
         uses: 'akashmishra24/gh-action-bump-version@main'
         with:
-          minor-wording: 'add,Adds,new'
-          major-wording: 'MAJOR,cut-major'
-          patch-wording: 'patch,fixes'
-          rc-wording: 'RELEASE,alpha'
+          minor-wording:  'add,Adds,new'
+          major-wording:  'MAJOR,cut-major'
+          patch-wording:  'patch,fixes'
+          rc-wording:     'RELEASE,alpha'
           PACKAGEJSON_DIR: '.'  # If your package.json is not in the root directory, specify its location here
           target-branch: 'main'
-          commit-message: ${{ env.COMMIT_MESSAGES }}
+          commit-message: ${{ steps.get-commits.outputs.COMMIT_MESSAGES }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
