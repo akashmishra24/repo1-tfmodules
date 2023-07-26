@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout pull request branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Determine tag version
         id: determine_version
@@ -27,6 +27,8 @@ jobs:
           pull_request_description=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | \
             jq -r '.body')
+
+          echo "Pull request description: $pull_request_description"
 
           # Perform case-insensitive matching for keywords
           shopt -s nocasematch
