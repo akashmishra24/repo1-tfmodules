@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout pull request branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Determine tag version
         id: determine_version
@@ -22,16 +22,20 @@ jobs:
           major_keyword='MAJOR/major'
           minor_keyword='MINOR/minor'
           patch_keyword='PATCH/patch'
+          
+          pull_request_description=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | \
+            jq -r '.body')
 
-          if [[ "${{ github.event.pull_request.body }}" == *"$major_keyword"* ]]; then
+          if [[ "$pull_request_description" == *"$major_keyword"* ]]; then
             new_version=$(echo $previous_version | sed -E 's/v([0-9]+)\.([0-9]+)\.([0-9]+)/\1/')
             new_version=$((new_version + 1))
             new_tag="v${new_version}.0.0"
-          elif [[ "${{ github.event.pull_request.body }}" == *"$minor_keyword"* ]]; then
+          elif [[ "$pull_request_description" == *"$minor_keyword"* ]]; then
             new_version=$(echo $previous_version | sed -E 's/v([0-9]+)\.([0-9]+)\.([0-9]+)/\2/')
             new_version=$((new_version + 1))
             new_tag=$(echo $previous_version | sed -E "s/v[0-9]+\.[0-9]+\.[0-9]+/v0.${new_version}.0/")
-          elif [[ "${{ github.event.pull_request.body }}" == *"$patch_keyword"* ]]; then
+          elif [[ "$pull_request_description" == *"$patch_keyword"* ]]; then
             new_version=$(echo $previous_version | sed -E 's/v([0-9]+)\.([0-9]+)\.([0-9]+)/\3/')
             new_version=$((new_version + 1))
             new_tag=$(echo $previous_version | sed -E "s/v[0-9]+\.[0-9]+\.[0-9]+/v0.0.${new_version}/")
