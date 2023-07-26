@@ -19,12 +19,13 @@ jobs:
           previous_version=$(cat version.txt)
           echo "Current version: $previous_version"
 
-          # Fetch pull request refs
-          git fetch origin ${{ github.event.pull_request.head.ref }}
-          git checkout ${{ github.event.pull_request.head.ref }}
+          # Get the pull request number
+          pr_number=$(echo "${{ github.event.pull_request.url }}" | grep -oE '[0-9]+$')
 
-          # Get the merge commit message
-          merge_commit_msg=$(git log -1 --format=%B)
+          # Fetch the merge commit message using GitHub API
+          merge_commit_msg=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${pr_number}/commits" | \
+            jq -r '.[0].commit.message')
 
           major_keyword='MAJOR/major'
           minor_keyword='MINOR/minor'
