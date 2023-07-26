@@ -10,8 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout pull request branch
+      - name: Checkout main branch
         uses: actions/checkout@v2
+        with:
+          ref: main
 
       - name: Determine tag version
         id: determine_version
@@ -75,19 +77,7 @@ jobs:
       - name: Commit and push changes
         if: env.NEW_TAG != 'v0.0.0'
         run: |
-          git checkout -b update-version
           git add version.txt
           git commit -m "Update version to $NEW_TAG"
-          git fetch origin main
-          git merge origin/main
-          git push origin update-version
-
-      - name: Create Pull Request
-        if: env.NEW_TAG != 'v0.0.0'
-        run: |
-          pull_request_title="Update version to $NEW_TAG"
-          pull_request_body="This pull request updates the version to $NEW_TAG."
-
-          curl -X POST "https://api.github.com/repos/${{ github.repository }}/pulls" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -d "{\"title\":\"$pull_request_title\",\"body\":\"$pull_request_body\",\"head\":\"update-version\",\"base\":\"main\"}"
+          git tag $NEW_TAG
+          git push origin main $NEW_TAG
