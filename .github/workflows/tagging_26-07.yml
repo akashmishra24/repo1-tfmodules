@@ -56,6 +56,16 @@ jobs:
           echo "New tag version: $new_tag"
           echo "NEW_TAG=$new_tag" >> $GITHUB_ENV
 
+      - name: Delete existing version.txt file
+        if: env.NEW_TAG != 'v0.0.0'
+        run: |
+          rm -f version.txt
+
+      - name: Create new version.txt file
+        if: env.NEW_TAG != 'v0.0.0'
+        run: |
+          echo $NEW_TAG > version.txt
+
       - name: Create Git tag
         if: env.NEW_TAG != 'v0.0.0'
         run: |
