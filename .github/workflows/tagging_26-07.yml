@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout pull request branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Determine tag version
         id: determine_version
@@ -54,11 +54,10 @@ jobs:
           shopt -u nocasematch
 
           echo "New tag version: $new_tag"
-          echo $new_tag > version.txt
-          echo "::set-output name=new_tag::$new_tag"
+          echo "NEW_TAG=$new_tag" >> $GITHUB_ENV
 
       - name: Create Git tag
-        if: steps.determine_version.outputs.new_tag != 'v0.0.0'
+        if: env.NEW_TAG != 'v0.0.0'
         run: |
-          git tag ${{ steps.determine_version.outputs.new_tag }}
-          git push origin ${{ steps.determine_version.outputs.new_tag }}
+          git tag $NEW_TAG
+          git push origin $NEW_TAG
