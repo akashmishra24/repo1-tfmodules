@@ -72,7 +72,7 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
-      - name: Create and push new branch
+      - name: Commit and push changes
         if: env.NEW_TAG != 'v0.0.0'
         run: |
           git checkout -b update-version
@@ -82,10 +82,10 @@ jobs:
 
       - name: Create Pull Request
         if: env.NEW_TAG != 'v0.0.0'
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Update version to $NEW_TAG"
-          title: "Update version to $NEW_TAG"
-          branch: update-version
-          base: main
+        run: |
+          pull_request_title="Update version to $NEW_TAG"
+          pull_request_body="This pull request updates the version to $NEW_TAG."
+
+          curl -X POST "https://api.github.com/repos/${{ github.repository }}/pulls" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -d "{\"title\":\"$pull_request_title\",\"body\":\"$pull_request_body\",\"head\":\"update-version\",\"base\":\"main\"}"
