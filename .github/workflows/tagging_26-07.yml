@@ -66,8 +66,26 @@ jobs:
         run: |
           echo $NEW_TAG > version.txt
 
-      - name: Create Git tag
+      - name: Configure Git
         if: env.NEW_TAG != 'v0.0.0'
         run: |
-          git tag $NEW_TAG
-          git push origin $NEW_TAG
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Create and push new branch
+        if: env.NEW_TAG != 'v0.0.0'
+        run: |
+          git checkout -b update-version
+          git add version.txt
+          git commit -m "Update version to $NEW_TAG"
+          git push origin update-version
+
+      - name: Create Pull Request
+        if: env.NEW_TAG != 'v0.0.0'
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Update version to $NEW_TAG"
+          title: "Update version to $NEW_TAG"
+          branch: update-version
+          base: main
