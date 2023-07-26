@@ -10,41 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout pull request branch
         uses: actions/checkout@v2
 
       - name: Determine tag version
         id: determine_version
         run: |
-          git checkout main
-          git pull origin main
           previous_version=$(cat version.txt)
           echo "Current version: $previous_version"
-
-          # Read the updated version.txt from the pull request branch
-          git checkout ${{ github.event.pull_request.head.ref }}
-          git pull origin ${{ github.event.pull_request.head.ref }}
-          updated_version=$(cat version.txt)
-          echo "Updated version: $updated_version"
 
           major_keyword='MAJOR/major'
           minor_keyword='MINOR/minor'
           patch_keyword='PATCH/patch'
 
-          if [[ "$updated_version" == *"$major_keyword"* ]]; then
+          if [[ "${{ github.event.pull_request.body }}" == *"$major_keyword"* ]]; then
             new_version=$(echo $previous_version | sed -E 's/v([0-9]+)\.([0-9]+)\.([0-9]+)/\1/')
             new_version=$((new_version + 1))
             new_tag="v${new_version}.0.0"
-          elif [[ "$updated_version" == *"$minor_keyword"* ]]; then
+          elif [[ "${{ github.event.pull_request.body }}" == *"$minor_keyword"* ]]; then
             new_version=$(echo $previous_version | sed -E 's/v([0-9]+)\.([0-9]+)\.([0-9]+)/\2/')
             new_version=$((new_version + 1))
             new_tag=$(echo $previous_version | sed -E "s/v[0-9]+\.[0-9]+\.[0-9]+/v0.${new_version}.0/")
-          elif [[ "$updated_version" == *"$patch_keyword"* ]]; then
+          elif [[ "${{ github.event.pull_request.body }}" == *"$patch_keyword"* ]]; then
             new_version=$(echo $previous_version | sed -E 's/v([0-9]+)\.([0-9]+)\.([0-9]+)/\3/')
             new_version=$((new_version + 1))
             new_tag=$(echo $previous_version | sed -E "s/v[0-9]+\.[0-9]+\.[0-9]+/v0.0.${new_version}/")
           else
-            echo "No keyword found in the updated version.txt. Skipping tag creation."
+            echo "No keyword found in the pull request description. Skipping tag creation."
             exit 0
           fi
 
