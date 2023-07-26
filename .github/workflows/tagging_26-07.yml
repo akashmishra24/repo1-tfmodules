@@ -78,6 +78,8 @@ jobs:
           git checkout -b update-version
           git add version.txt
           git commit -m "Update version to $NEW_TAG"
+          git fetch origin main
+          git merge origin/main
           git push origin update-version
 
       - name: Create Pull Request
