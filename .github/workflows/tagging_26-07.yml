@@ -19,9 +19,9 @@ jobs:
           previous_version=$(cat version.txt)
           echo "Current version: $previous_version"
 
-          # Fetch merge commit message from the main branch
-          git fetch origin main
-          merge_commit_msg=$(git log -1 --format=%B origin/main)
+          # Fetch merge commit message from the pull request branch
+          git fetch origin ${{ github.event.pull_request.head.ref }}
+          merge_commit_msg=$(git log -1 --format=%B ${{ github.event.pull_request.head.sha }})
 
           major_keyword='MAJOR/major'
           minor_keyword='MINOR/minor'
